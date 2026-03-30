@@ -15,8 +15,20 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Gmail transporter
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: { user: process.env.EMAIL_USER, pass: process.env.EMAIL_PASS }
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false,           // TLS (use port 465 with secure: true if preferred)
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+  // Force IPv4
+  socket: {
+    family: 4
+  },
+  // Optional: increase timeouts to avoid hangs
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
 });
 
 app.post('/api/contact', async (req, res) => {
