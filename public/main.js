@@ -196,11 +196,11 @@ if (contactForm) {
 
     try {
       // Use relative URL because backend serves frontend on the same port
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, projectType, message })
-      });
+      const response = await fetch('https://onxmariners-backend.onrender.com/api/contact', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({ name, email, projectType, message })
+});
 
       const data = await response.json();
       if (response.ok) {
