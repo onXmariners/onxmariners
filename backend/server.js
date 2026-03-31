@@ -4,10 +4,28 @@ const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 const path = require('path');
 const dns = require('dns');
+const mongoose = required('mongoose');
 
 dns.setDefaultResultOrder('ipv4first');
 
 dotenv.config();
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch(err => console.error("❌ DB Error:", err));
+
+  const MessageSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  projectType: String,
+  message: String,
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+});
+
+const Message = mongoose.model("Message", MessageSchema);
 
 const app = express();
 app.use(cors());
@@ -47,41 +65,34 @@ app.post("/api/contact", async (req, res) => {
   try {
     const { name, email, projectType, message } = req.body;
 
-    // ✅ Validation
     if (!name || !email || !message) {
-      return res.status(400).json({ error: "All fields are required" });
+      return res.status(400).json({ error: "All fields required" });
     }
 
-    const mailOptions = {
-      from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-      to: process.env.RECIPIENT_EMAIL,
-      replyTo: email,
-      subject: `New inquiry from ${name} - ${projectType || "General"} - ${Date.now()}`,
-      text: `Name: ${name}\nEmail: ${email}\nProject Type: ${projectType}\n\nMessage:\n${message}`,
-    };
-
-    const info = await transporter.sendMail(mailOptions);
-
-    console.log("✅ Email sent:", info.response);
+    await Message.create({
+      name,
+      email,
+      projectType,
+      message
+    });
 
     res.status(200).json({
       success: true,
-      message: "Message sent successfully"
+      message: "Message saved successfully"
     });
 
   } catch (error) {
-    console.error("❌ FULL ERROR:", error);
+    console.error("DB ERROR:", error);
+    res.status(500).json({ error: "Failed to save message" });
+  }
+});
 
-    // ✅ Better error response
-    if (error.code === "ETIMEDOUT") {
-      return res.status(500).json({
-        error: "Email service timeout. Try again later."
-      });
-    }
-
-    res.status(500).json({
-      error: "Failed to send message"
-    });
+app.get("/api/messages", async (req, res) => {
+  try {
+    const messages = await Message.find().sort({ createdAt: -1 });
+    res.json(messages);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch messages" });
   }
 });
 
@@ -89,6 +100,10 @@ app.post("/api/contact", async (req, res) => {
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
 });
+
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("✅ MongoDB Connected"))
+  .catch(err => console.error("❌ DB Error:", err));
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
