@@ -23,7 +23,7 @@ const transporter = nodemailer.createTransport({
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
-  },
+  }
 });
 
 app.post('/api/contact', async (req, res) => {
@@ -33,16 +33,17 @@ app.post('/api/contact', async (req, res) => {
     return res.status(400).json({ error: 'All fields are required' });
   }
 
-  const mailOptions = {
-    from: `"${name}" <${email}>`,      // The sender as the person filling the form
-    to: process.env.RECIPIENT_EMAIL,
-    subject: `New inquiry from ${name} - ${projectType}`,
-    text: `Name: ${name}\nEmail: ${email}\nProject Type: ${projectType}\n\nMessage:\n${message}`,
-    html: `<p><strong>Name:</strong> ${name}</p>
-           <p><strong>Email:</strong> ${email}</p>
-           <p><strong>Project Type:</strong> ${projectType}</p>
-           <p><strong>Message:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>`,
-  };
+const mailOptions = {
+  from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
+  to: process.env.RECIPIENT_EMAIL,
+  replyTo: email,
+  subject: `New inquiry from ${name} - ${projectType}`,
+  text: `Name: ${name}\nEmail: ${email}\nProject Type: ${projectType}\n\nMessage:\n${message}`,
+  html: `<p><strong>Name:</strong> ${name}</p>
+         <p><strong>Email:</strong> ${email}</p>
+         <p><strong>Project Type:</strong> ${projectType}</p>
+         <p><strong>Message:</strong><br/>${message.replace(/\n/g, '<br/>')}</p>`,
+};
 
   try {
     await transporter.sendMail(mailOptions);
