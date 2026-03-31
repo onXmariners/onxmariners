@@ -3,6 +3,8 @@ const cors = require('cors');
 const nodemailer = require('nodemailer');
 const dotenv = require('dotenv');
 const path = require('path');
+const dns = require('dns');
+dns.setDefaultResultOrder('ipv4first');
 
 dotenv.config();
 
@@ -15,20 +17,13 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 
 // Gmail transporter
 const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
+  host: "smtp.gmail.com",
   port: 587,
-  secure: false,           // TLS (use port 465 with secure: true if preferred)
+  secure: false,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
-  // Force IPv4
-  socket: {
-    family: 4
-  },
-  // Optional: increase timeouts to avoid hangs
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
 });
 
 app.post('/api/contact', async (req, res) => {
