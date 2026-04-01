@@ -13,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(path.join(__dirname, '../public')));
 
+// ================== RESEND ==================
 let resend;
 
 try {
@@ -47,42 +48,62 @@ const MessageSchema = new mongoose.Schema({
 
 const Message = mongoose.model("Message", MessageSchema);
 
-// ================== EMAIL ==================
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+// ================== CONTACT SAVE ==================
+app.post("/api/contact", async (req, res) => {
+  try {
+    const { name, email, projectType, message } = req.body;
+
+    if (!name || !email || !message) {
+      return res.status(400).json({ error: "All fields required" });
+    }
+
+    await Message.create({ name, email, projectType, message });
+
+    res.json({ success: true });
+
+  } catch (err) {
+    console.error("CONTACT ERROR:", err);
+    res.status(500).json({ error: "Failed" });
   }
 });
 
-// ================== CONTACT ==================
-
+// ================== REPLY (RESEND ONLY) ==================
 app.post("/api/reply", async (req, res) => {
   try {
+    if (req.query.key !== "admin123") {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
+
     if (!resend) {
       return res.status(500).json({ error: "Email service not ready" });
     }
 
     const { to, subject, message } = req.body;
 
-    if (!to) return res.status(400).json({ error: "No recipient" });
+    console.log("Reply Request:", req.body);
+
+    if (!to) {
+      return res.status(400).json({ error: "No recipient email" });
+    }
+
+    if (!message) {
+      return res.status(400).json({ error: "Message required" });
+    }
 
     await resend.emails.send({
       from: "OnXmariners <onboarding@resend.dev>",
       to,
-      subject,
-      html: `<p>${message}</p>`
+      subject: subject || "Reply from OnXmariners",
+      html: getEmailTemplate(message)
     });
 
     res.json({ success: true });
 
   } catch (err) {
-    console.error("REPLY ERROR:", err);
+    console.error("RESEND ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
-     
 
 // ================== FETCH ==================
 app.get("/api/messages", async (req, res) => {
@@ -110,100 +131,21 @@ app.put("/api/read/:id", async (req, res) => {
   res.json({ success: true });
 });
 
-// ================== RESTORE ==================
-app.post("/api/restore", async (req, res) => {
-  if (req.query.key !== "admin123") return res.sendStatus(403);
-
-  await Message.create(req.body);
-  res.json({ success: true });
-});
-
-// ================== REPLY ==================
-app.post("/api/reply", async (req, res) => {
-  try {
-    if (req.query.key !== "admin123") return res.sendStatus(403);
-
-    const { to, subject, message } = req.body;
-
-    console.log("Reply Request:", req.body);
-
-    if (!to) {
-      return res.status(400).json({ error: "No recipient email" });
-    }
-
-    if (!message) {
-      return res.status(400).json({ error: "Message required" });
-    }
-
-    await transporter.sendMail({
-      from: `"OnXmariners Support" <${process.env.EMAIL_USER}>`,
-      to,
-      subject: subject || "Reply from OnXmariners",
-      html: `<p>${message}</p>`
-    });
-
-    res.json({ success: true });
-
-  } catch (err) {
-    console.error("REPLY ERROR:", err);
-    res.status(500).json({ error: err.message });
-  }
-});
-
+// ================== TEMPLATE ==================
 function getEmailTemplate(message) {
   return `
-  <div style="
-    font-family: Arial, sans-serif;
-    background:#f9fafb;
-    padding:20px;
-  ">
-
-    <div style="
-      max-width:600px;
-      margin:auto;
-      background:white;
-      border-radius:10px;
-      overflow:hidden;
-      box-shadow:0 5px 20px rgba(0,0,0,0.1);
-    ">
-
-      <!-- Header -->
-      <div style="
-        background:#000;
-        color:#fbbf24;
-        padding:15px;
-        font-size:20px;
-        font-weight:bold;
-      ">
+  <div style="font-family: Arial; background:#f9fafb; padding:20px;">
+    <div style="max-width:600px;margin:auto;background:white;border-radius:10px;overflow:hidden;">
+      <div style="background:#000;color:#fbbf24;padding:15px;font-size:20px;">
         🚀 OnXmariners
       </div>
-
-      <!-- Body -->
-      <div style="padding:20px; color:#333;">
-        <h3>Hello 👋</h3>
-
+      <div style="padding:20px;">
         <p>${message}</p>
-
-        <br>
-
-        <p style="color:gray;">
-          This message was sent from OnXmariners team.
-        </p>
       </div>
-
-      <!-- Footer -->
-      <div style="
-        background:#f3f4f6;
-        padding:15px;
-        font-size:12px;
-        color:gray;
-        text-align:center;
-      ">
-        © 2026 OnXmariners. All rights reserved.
+      <div style="background:#eee;padding:10px;text-align:center;font-size:12px;">
+        © OnXmariners
       </div>
-
     </div>
-
   </div>
   `;
 }
