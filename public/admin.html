@@ -124,8 +124,7 @@
 
   <button onclick="exportExcel()">Export Excel</button>
   <button onclick="exportPDF()">Export PDF</button>
-  <button onclick="openReply('${m.email}')">Reply</button>
-</div>
+  </div>
 
 <!-- Chart -->
 <div class="glass">
@@ -208,16 +207,17 @@ function render() {
     .forEach(m => {
       const div = document.createElement("div");
       div.className = "glass card " + (m.read ? "read" : "");
-
-      div.innerHTML = `
+div.innerHTML = `
   <p><b>${m.name}</b></p>
   <p>${m.email}</p>
   <p>${m.message}</p>
   <p style="font-size:12px;color:gray;">
     ${new Date(m.createdAt).toLocaleString()}
   </p>
+
   <button onclick="markRead('${m._id}')">Read</button>
   <button onclick="del('${m._id}')">Delete</button>
+  <button onclick="openReply('${m.email}')">Reply</button>
 `;
 
       container.appendChild(div);
