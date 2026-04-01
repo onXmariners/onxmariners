@@ -102,13 +102,18 @@ app.post("/api/reply", async (req, res) => {
   try {
     if (req.query.key !== "admin123") return res.sendStatus(403);
 
-    const { to, message } = req.body;
+    const { to, subject, message } = req.body;
 
     await transporter.sendMail({
-      from: `"OnX Support" <${process.env.EMAIL_USER}>`,
+      from: `"OnXmariners Support" <${process.env.EMAIL_USER}>`,
       to,
-      subject: "Reply from OnX Team",
-      html: `<p>${message}</p>`
+      subject: subject || "Reply from OnXmariners Team",
+      html: `
+        <div>
+          <h3>Reply from OnXmariners</h3>
+          <p>${message}</p>
+        </div>
+      `
     });
 
     res.json({ success: true });

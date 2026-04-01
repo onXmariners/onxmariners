@@ -95,7 +95,7 @@
 
 <body>
 
-<h1>🚀 OnX CRM Dashboard</h1>
+<h1>🚀 OnXmariners CRM Dashboard</h1>
 <!-- Notification -->
 <div style="position:fixed; top:20px; right:20px;">
   🔔 <span id="notifCount">0</span>
@@ -124,7 +124,7 @@
 
   <button onclick="exportExcel()">Export Excel</button>
   <button onclick="exportPDF()">Export PDF</button>
-  <button onclick="reply('${m.email}')">Reply</button>
+  <button onclick="openReply('${m.email}')">Reply</button>
 </div>
 
 <!-- Chart -->
@@ -310,7 +310,86 @@ document.getElementById("filter").addEventListener("change", render);
 setInterval(load, 10000);
 
 load();
+
+// ---- Modal for openReply ----
+
+let currentEmail = "";
+
+function openReply(email) {
+  currentEmail = email;
+
+  document.getElementById("replyModal").style.display = "flex";
+  document.getElementById("replyTo").innerText = "To: " + email;
+}
+
+function closeModal() {
+  document.getElementById("replyModal").style.display = "none";
+}
+
+async function sendReply() {
+  const subject = document.getElementById("replySubject").value;
+  const message = document.getElementById("replyMessage").value;
+
+  if (!message) return alert("Message required");
+
+  const res = await fetch(`${API}/api/reply?key=${KEY}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      to: currentEmail,
+      subject,
+      message
+    })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    alert("✅ Email sent successfully");
+    closeModal();
+  } else {
+    alert("❌ Failed to send email");
+  }
+}
+
+
 </script>
+
+<div id="replyModal" style="
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.7);
+  justify-content:center;
+  align-items:center;
+">
+
+  <div style="
+    background:#111;
+    padding:20px;
+    border-radius:12px;
+    width:400px;
+  ">
+
+    <h3>Reply Email</h3>
+
+    <p id="replyTo"></p>
+
+    <input id="replySubject" placeholder="Subject" style="width:100%; margin-bottom:10px;">
+
+    <textarea id="replyMessage" placeholder="Write your message..."
+      style="width:100%; height:100px;"></textarea>
+
+    <br><br>
+
+    <button onclick="sendReply()">Send</button>
+    <button onclick="closeModal()">Cancel</button>
+
+  </div>
+</div>
 
 </body>
 </html>
