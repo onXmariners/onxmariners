@@ -91,11 +91,12 @@ app.post("/api/reply", async (req, res) => {
     }
 
     await resend.emails.send({
-      from: "OnXmariners <businessonxpdf.com>",
-      to,
-      subject: subject || "Reply from OnXmariners",
-      html: getEmailTemplate(message)
-    });
+  from: "OnXmariners <kumarpradyuman803202@gmail.com>",
+  to, // client
+  bcc: process.env.EMAIL_USER, // 🔥 YOU
+  subject,
+  html: getEmailTemplate(message)
+});
 
     res.json({ success: true });
 
