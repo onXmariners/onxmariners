@@ -30,6 +30,7 @@ const MessageSchema = new mongoose.Schema({
   email: String,
   projectType: String,
   message: String,
+  read: {type: Boolean, default: false },
   createdAt: {
     type: Date,
     default: Date.now
@@ -122,6 +123,23 @@ app.get("/api/messages", async (req, res) => {
   res.json(messages);
 });
 
+// ----- delete ApI  functions  -------
+
+app.delete("/api/delete/:id", async (req, res) => {
+  if (req.query.key !== "admin123") return res.sendStatus(403);
+
+  await Message.findByIdAndDelete(req.params.id);
+  res.send("Deleted");
+});
+
+// ------ mark as read api functions  --------
+
+app.put("/api/read/:id", async (req, res) => {
+  if (req.query.key !== "admin123") return res.sendStatus(403);
+
+  await Message.findByIdAndUpdate(req.params.id, { read: true });
+  res.send("Updated");
+});
 
 // ================== SERVER ==================
 const PORT = process.env.PORT || 5000;

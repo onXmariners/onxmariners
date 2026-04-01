@@ -1,59 +1,101 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Admin Dashboard</title>
+  <title>CRM Dashboard</title>
   <style>
     body {
-      font-family: Arial;
+      font-family: 'Segoe UI';
       background: #0f172a;
       color: white;
       padding: 20px;
     }
+
     h1 {
       text-align: center;
+      margin-bottom: 30px;
     }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
     .card {
       background: #1e293b;
       padding: 15px;
-      margin: 15px 0;
       border-radius: 10px;
+      position: relative;
+      transition: 0.3s;
     }
+
+    .card.read {
+      opacity: 0.6;
+    }
+
+    button {
+      margin-right: 5px;
+      padding: 5px 10px;
+      border: none;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .delete { background: red; color: white; }
+    .read { background: green; color: white; }
+
   </style>
 </head>
 <body>
 
-<h1>📩 Messages Dashboard</h1>
+<h1>📊 CRM Dashboard</h1>
 
-<div id="messages"></div>
+<div class="grid" id="messages"></div>
 
 <script>
-const ADMIN_KEY = "admin123"; // simple protection
+const API = "https://onxmariners-backend.onrender.com";
+const KEY = "admin123";
 
-fetch(`https://onxmariners-backend.onrender.com/api/messages?key=${ADMIN_KEY}`)
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById("messages");
+async function loadMessages() {
+  const res = await fetch(`${API}/api/messages?key=${KEY}`);
+  const data = await res.json();
 
-    if (data.length === 0) {
-      container.innerHTML = "<p>No messages yet</p>";
-      return;
-    }
+  const container = document.getElementById("messages");
+  container.innerHTML = "";
 
-    data.forEach(msg => {
-      const div = document.createElement("div");
-      div.className = "card";
+  data.forEach(msg => {
+    const div = document.createElement("div");
+    div.className = "card";
 
-      div.innerHTML = `
-        <p><strong>Name:</strong> ${msg.name}</p>
-        <p><strong>Email:</strong> ${msg.email}</p>
-        <p><strong>Project:</strong> ${msg.projectType || "N/A"}</p>
-        <p><strong>Message:</strong> ${msg.message}</p>
-        <p><small>${new Date(msg.createdAt).toLocaleString()}</small></p>
-      `;
+    div.innerHTML = `
+      <p><b>Name:</b> ${msg.name}</p>
+      <p><b>Email:</b> ${msg.email}</p>
+      <p><b>Project:</b> ${msg.projectType || "N/A"}</p>
+      <p>${msg.message}</p>
 
-      container.appendChild(div);
-    });
+      <button class="read" onclick="markRead('${msg._id}')">Mark Read</button>
+      <button class="delete" onclick="deleteMsg('${msg._id}')">Delete</button>
+    `;
+
+    container.appendChild(div);
   });
+}
+
+async function deleteMsg(id) {
+  await fetch(`${API}/api/delete/${id}?key=${KEY}`, {
+    method: "DELETE"
+  });
+  loadMessages();
+}
+
+async function markRead(id) {
+  await fetch(`${API}/api/read/${id}?key=${KEY}`, {
+    method: "PUT"
+  });
+  loadMessages();
+}
+
+loadMessages();
 </script>
 
 </body>
