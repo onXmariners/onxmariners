@@ -125,20 +125,37 @@ app.get("/api/messages", async (req, res) => {
 
 // ----- delete ApI  functions  -------
 
+// DELETE
 app.delete("/api/delete/:id", async (req, res) => {
-  if (req.query.key !== "admin123") return res.sendStatus(403);
+  try {
+    if (req.query.key !== "admin123") {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
 
-  await Message.findByIdAndDelete(req.params.id);
-  res.send("Deleted");
+    await Message.findByIdAndDelete(req.params.id);
+
+    res.json({ success: true, message: "Deleted successfully" });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Delete failed" });
+  }
 });
 
-// ------ mark as read api functions  --------
-
+// MARK AS READ
 app.put("/api/read/:id", async (req, res) => {
-  if (req.query.key !== "admin123") return res.sendStatus(403);
+  try {
+    if (req.query.key !== "admin123") {
+      return res.status(403).json({ error: "Unauthorized" });
+    }
 
-  await Message.findByIdAndUpdate(req.params.id, { read: true });
-  res.send("Updated");
+    await Message.findByIdAndUpdate(req.params.id, { read: true });
+
+    res.json({ success: true });
+
+  } catch (err) {
+    res.status(500).json({ error: "Update failed" });
+  }
 });
 
 // ================== SERVER ==================

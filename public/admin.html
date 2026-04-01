@@ -124,7 +124,6 @@
 
 <!-- Chart -->
 <div class="glass">
-  <canvas id="chart"></canvas>
 </div>
 
 <br>
@@ -153,7 +152,6 @@ async function load() {
   messages = data;
   updateStats();
   render();
-  drawChart();
 }
 
 // Stats
@@ -184,12 +182,15 @@ function render() {
       div.className = "glass card " + (m.read ? "read" : "");
 
       div.innerHTML = `
-        <p><b>${m.name}</b></p>
-        <p>${m.email}</p>
-        <p>${m.message}</p>
-        <button onclick="markRead('${m._id}')">Read</button>
-        <button onclick="del('${m._id}')">Delete</button>
-      `;
+  <p><b>${m.name}</b></p>
+  <p>${m.email}</p>
+  <p>${m.message}</p>
+  <p style="font-size:12px;color:gray;">
+    ${new Date(m.createdAt).toLocaleString()}
+  </p>
+  <button onclick="markRead('${m._id}')">Read</button>
+  <button onclick="del('${m._id}')">Delete</button>
+`;
 
       container.appendChild(div);
     });
@@ -213,22 +214,37 @@ function drawChart() {
   });
 }
 
-// Actions
+// Actions for mark read and delete
 async function markRead(id) {
-  await fetch(`${API}/api/read/${id}?key=${KEY}`, { method: "PUT" });
+  const res = await fetch(`${API}/api/read/${id}?key=${KEY}`, {
+    method: "PUT"
+  });
+
+  const data = await res.json();
+  console.log(data);
+
   load();
 }
 
 async function del(id) {
-  await fetch(`${API}/api/delete/${id}?key=${KEY}`, { method: "DELETE" });
+  const res = await fetch(`${API}/api/delete/${id}?key=${KEY}`, {
+    method: "DELETE"
+  });
+
+  const data = await res.json();
+  console.log(data);
+
   load();
 }
 
+
 // Export Excel
 function exportExcel() {
-  let csv = "Name,Email,Message\n";
+  let csv = "Name,Email,Message,Date\n";
+
   messages.forEach(m => {
-    csv += `${m.name},${m.email},${m.message}\n`;
+    const date = new Date(m.createdAt).toLocaleString();
+    csv += `${m.name},${m.email},${m.message},${date}\n`;
   });
 
   const blob = new Blob([csv]);
@@ -240,7 +256,22 @@ function exportExcel() {
 
 // Export PDF
 function exportPDF() {
-  window.print();
+  let content = "<h2>Messages</h2>";
+
+  messages.forEach(m => {
+    content += `
+      <p>
+        <b>${m.name}</b><br>
+        ${m.email}<br>
+        ${m.message}<br>
+        <small>${new Date(m.createdAt).toLocaleString()}</small>
+      </p><hr>
+    `;
+  });
+
+  const win = window.open("", "", "width=800,height=600");
+  win.document.write(content);
+  win.print();
 }
 
 // Events
