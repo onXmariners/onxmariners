@@ -91,7 +91,7 @@ app.post("/api/reply", async (req, res) => {
     }
 
     await resend.emails.send({
-      from: "OnXmariners <onboarding@resend.dev>",
+      from: "OnXmariners <businessonxpdf.com>",
       to,
       subject: subject || "Reply from OnXmariners",
       html: getEmailTemplate(message)
