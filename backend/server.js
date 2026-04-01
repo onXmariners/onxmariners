@@ -1,14 +1,5 @@
 const express = require('express');
 const cors = require('cors');
-const { Resend } = require('resend');
-const { Resend } = require('resend');
-
-if (!process.env.RESEND_API_KEY) {
-  console.error("❌ RESEND_API_KEY missing");
-  process.exit(1);
-}
-
-const resend = new Resend(process.env.RESEND_API_KEY);
 const dotenv = require('dotenv');
 const path = require('path');
 const dns = require('dns');
@@ -17,12 +8,27 @@ const mongoose = require('mongoose');
 dns.setDefaultResultOrder('ipv4first');
 dotenv.config();
 
-console.log("RESEND KEY:", process.env.RESEND_API_KEY);
-
 const app = express();
 app.use(cors());
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../frontend')));
+app.use(express.static(path.join(__dirname, '../public')));
+
+let resend;
+
+try {
+  const { Resend } = require("resend");
+
+  if (!process.env.RESEND_API_KEY) {
+    throw new Error("Missing RESEND_API_KEY");
+  }
+
+  resend = new Resend(process.env.RESEND_API_KEY);
+
+  console.log("✅ Resend initialized");
+
+} catch (err) {
+  console.error("❌ Resend setup failed:", err.message);
+}
 
 // ================== DB ==================
 mongoose.connect(process.env.MONGO_URI)
@@ -54,34 +60,29 @@ const transporter = nodemailer.createTransport({
 
 app.post("/api/reply", async (req, res) => {
   try {
-    if (req.query.key !== "admin123") {
-      return res.status(403).json({ error: "Unauthorized" });
+    if (!resend) {
+      return res.status(500).json({ error: "Email service not ready" });
     }
 
     const { to, subject, message } = req.body;
 
-    if (!to) {
-      return res.status(400).json({ error: "Recipient required" });
-    }
-
-    if (!message) {
-      return res.status(400).json({ error: "Message required" });
-    }
+    if (!to) return res.status(400).json({ error: "No recipient" });
 
     await resend.emails.send({
-      from: "OnXmariners <onboarding@resend.dev>", // temp sender
-      to: to,
-      subject: subject || "Reply from OnXmariners",
-      html: getEmailTemplate(message)
+      from: "OnXmariners <onboarding@resend.dev>",
+      to,
+      subject,
+      html: `<p>${message}</p>`
     });
 
     res.json({ success: true });
 
   } catch (err) {
-    console.error("RESEND ERROR:", err);
+    console.error("REPLY ERROR:", err);
     res.status(500).json({ error: err.message });
   }
 });
+     
 
 // ================== FETCH ==================
 app.get("/api/messages", async (req, res) => {
