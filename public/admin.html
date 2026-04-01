@@ -29,7 +29,7 @@
 <script>
 const ADMIN_KEY = "admin123"; // simple protection
 
-fetch(`/api/messages?key=${ADMIN_KEY}`)
+fetch(`https://onxmariners-backend.onrender.com/api/messages?key=${ADMIN_KEY}`)
   .then(res => res.json())
   .then(data => {
     const container = document.getElementById("messages");
