@@ -96,6 +96,29 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
+// ================== REPLY API (OPTIONAL) ==================
+
+app.post("/api/reply", async (req, res) => {
+  try {
+    if (req.query.key !== "admin123") return res.sendStatus(403);
+
+    const { to, message } = req.body;
+
+    await transporter.sendMail({
+      from: `"OnX Support" <${process.env.EMAIL_USER}>`,
+      to,
+      subject: "Reply from OnX Team",
+      html: `<p>${message}</p>`
+    });
+
+    res.json({ success: true });
+
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: "Email failed" });
+  }
+});
+
 
 // ================== FETCH MESSAGES ==================
 app.get("/api/messages", async (req, res) => {
@@ -168,6 +191,13 @@ app.put("/api/read/:id", async (req, res) => {
   }
 });
 
+// ----- restore with in 5 sec api -------
+app.post("/api/restore", async (req, res) => {
+  if (req.query.key !== "admin123") return res.sendStatus(403);
+
+  await Message.create(req.body);
+  res.json({ success: true });
+});
 
 // ================== SERVER ==================
 const PORT = process.env.PORT || 5000;

@@ -96,6 +96,10 @@
 <body>
 
 <h1>🚀 OnX CRM Dashboard</h1>
+<!-- Notification -->
+<div style="position:fixed; top:20px; right:20px;">
+  🔔 <span id="notifCount">0</span>
+</div>
 
 <!-- Stats -->
 <div class="stats">
@@ -120,6 +124,7 @@
 
   <button onclick="exportExcel()">Export Excel</button>
   <button onclick="exportPDF()">Export PDF</button>
+  <button onclick="reply('${m.email}')">Reply</button>
 </div>
 
 <!-- Chart -->
@@ -145,14 +150,37 @@ async function load() {
 
   // 🔔 Notification
   if (data.length > lastCount && lastCount !== 0) {
-    alert("🔥 New message received!");
-  }
+  const newCount = data.length - lastCount;
+  document.getElementById("notifCount").innerText = newCount;
+}
   lastCount = data.length;
 
   messages = data;
   updateStats();
   render();
 }
+
+// ---- reply function ----
+
+async function reply(email) {
+  const message = prompt("Enter your reply:");
+
+  if (!message) return;
+
+  await fetch(`${API}/api/reply?key=${KEY}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      to: email,
+      message
+    })
+  });
+
+  alert("Email sent!");
+}
+
 
 // Stats
 function updateStats() {

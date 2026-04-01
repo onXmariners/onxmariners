@@ -16,6 +16,42 @@
   gtag('js', new Date());
 
   gtag('config', 'G-08LY933S9G');
+
+  let lastDeleted = null;
+
+async function del(id) {
+  const msg = messages.find(m => m._id === id);
+  lastDeleted = msg;
+
+  await fetch(`${API}/api/delete/${id}?key=${KEY}`, {
+    method: "DELETE"
+  });
+
+  showUndo();
+  load();
+}
+
+function showUndo() {
+  const bar = document.getElementById("undoBar");
+  bar.style.display = "block";
+
+  setTimeout(() => {
+    bar.style.display = "none";
+    lastDeleted = null;
+  }, 5000);
+}
+
+async function undoDelete() {
+  if (!lastDeleted) return;
+
+  await fetch(`${API}/api/restore?key=${KEY}`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(lastDeleted)
+  });
+
+  load();
+}
 </script>
 </head>
 <body>
@@ -39,6 +75,10 @@
     <div class="nav-actions">
       <a href="#contact" class="hire-me-btn">Hire Me →</a>
     </div>
+    <div id="undoBar" style="display:none; background:#222; padding:10px; border-radius:8px;">
+  Message deleted 
+  <button onclick="undoDelete()">Undo</button>
+</div>
   </div>
 </nav>
 
