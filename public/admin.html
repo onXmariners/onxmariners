@@ -1,76 +1,79 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>OnX CRM Dashboard</title>
+  <title>OnX CRM</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      font-family: 'Segoe UI';
-    }
-
     body {
-      background: linear-gradient(135deg, #0f172a, #1e293b);
-      color: white;
-      padding: 20px;
+      margin: 0;
+      font-family: 'Segoe UI';
+      background: #000;
+      color: #e5e5e5;
+      padding: 15px;
     }
 
     h1 {
       text-align: center;
+      color: #fbbf24;
       margin-bottom: 20px;
     }
 
-    /* 🔥 Glass Cards */
+    /* Glass UI */
     .glass {
       background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
       backdrop-filter: blur(10px);
       border-radius: 12px;
       padding: 15px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
-    /* 🔥 Stats */
+    /* Stats */
     .stats {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
-      gap: 15px;
-      margin-bottom: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+      gap: 10px;
+      margin-bottom: 15px;
     }
 
-    .stat-card {
+    .stat {
       text-align: center;
-      padding: 20px;
     }
 
-    .stat-card h2 {
-      font-size: 28px;
+    .stat h2 {
+      color: #fbbf24;
     }
 
-    /* 🔍 Search */
+    /* Controls */
     .controls {
-      margin-bottom: 20px;
       display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    input, select, button {
+      padding: 8px;
+      border-radius: 6px;
+      border: none;
+    }
+
+    button {
+      background: #fbbf24;
+      color: black;
+      cursor: pointer;
+    }
+
+    /* Messages */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px,1fr));
       gap: 10px;
     }
 
-    input, select {
-      padding: 10px;
-      border-radius: 8px;
-      border: none;
-      width: 100%;
-    }
-
-    /* 📩 Messages */
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
-      gap: 15px;
-    }
-
     .card {
-      position: relative;
       transition: 0.3s;
     }
 
@@ -82,16 +85,10 @@
       transform: translateY(-5px);
     }
 
-    button {
-      margin-top: 10px;
-      padding: 6px 10px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    /* Mobile */
+    @media(max-width:600px) {
+      h1 { font-size: 18px; }
     }
-
-    .delete { background: red; color: white; }
-    .read { background: green; color: white; }
 
   </style>
 </head>
@@ -100,103 +97,160 @@
 
 <h1>🚀 OnX CRM Dashboard</h1>
 
-<!-- 🔥 Stats -->
+<!-- Stats -->
 <div class="stats">
-  <div class="glass stat-card">
+  <div class="glass stat">
     <h2 id="total">0</h2>
-    <p>Total Messages</p>
+    <p>Total</p>
   </div>
-  <div class="glass stat-card">
+  <div class="glass stat">
     <h2 id="unread">0</h2>
     <p>Unread</p>
   </div>
 </div>
 
-<!-- 🔍 Controls -->
+<!-- Controls -->
 <div class="controls">
-  <input type="text" id="search" placeholder="Search name/email...">
+  <input id="search" placeholder="Search...">
   <select id="filter">
     <option value="all">All</option>
     <option value="read">Read</option>
     <option value="unread">Unread</option>
   </select>
+
+  <button onclick="exportExcel()">Export Excel</button>
+  <button onclick="exportPDF()">Export PDF</button>
 </div>
 
-<!-- 📩 Messages -->
+<!-- Chart -->
+<div class="glass">
+  <canvas id="chart"></canvas>
+</div>
+
+<br>
+
+<!-- Messages -->
 <div class="grid" id="messages"></div>
 
 <script>
 const API = "https://onxmariners-backend.onrender.com";
 const KEY = "admin123";
 
-let allMessages = [];
+let messages = [];
+let lastCount = 0;
 
-async function loadMessages() {
+// Load messages
+async function load() {
   const res = await fetch(`${API}/api/messages?key=${KEY}`);
   const data = await res.json();
 
-  allMessages = data;
+  // 🔔 Notification
+  if (data.length > lastCount && lastCount !== 0) {
+    alert("🔥 New message received!");
+  }
+  lastCount = data.length;
+
+  messages = data;
   updateStats();
-  renderMessages();
+  render();
+  drawChart();
 }
 
+// Stats
 function updateStats() {
-  document.getElementById("total").innerText = allMessages.length;
+  document.getElementById("total").innerText = messages.length;
   document.getElementById("unread").innerText =
-    allMessages.filter(m => !m.read).length;
+    messages.filter(m => !m.read).length;
 }
 
-function renderMessages() {
-  const container = document.getElementById("messages");
-  container.innerHTML = "";
-
+// Render messages
+function render() {
   const search = document.getElementById("search").value.toLowerCase();
   const filter = document.getElementById("filter").value;
 
-  const filtered = allMessages.filter(msg => {
-    const matchSearch =
-      msg.name.toLowerCase().includes(search) ||
-      msg.email.toLowerCase().includes(search);
+  const container = document.getElementById("messages");
+  container.innerHTML = "";
 
-    const matchFilter =
-      filter === "all" ||
-      (filter === "read" && msg.read) ||
-      (filter === "unread" && !msg.read);
+  messages
+    .filter(m =>
+      (m.name.toLowerCase().includes(search) ||
+       m.email.toLowerCase().includes(search)) &&
+      (filter === "all" ||
+       (filter === "read" && m.read) ||
+       (filter === "unread" && !m.read))
+    )
+    .forEach(m => {
+      const div = document.createElement("div");
+      div.className = "glass card " + (m.read ? "read" : "");
 
-    return matchSearch && matchFilter;
-  });
+      div.innerHTML = `
+        <p><b>${m.name}</b></p>
+        <p>${m.email}</p>
+        <p>${m.message}</p>
+        <button onclick="markRead('${m._id}')">Read</button>
+        <button onclick="del('${m._id}')">Delete</button>
+      `;
 
-  filtered.forEach(msg => {
-    const div = document.createElement("div");
-    div.className = "glass card " + (msg.read ? "read" : "");
+      container.appendChild(div);
+    });
+}
 
-    div.innerHTML = `
-      <p><b>${msg.name}</b> (${msg.email})</p>
-      <p>${msg.projectType || ""}</p>
-      <p>${msg.message}</p>
+// Chart
+function drawChart() {
+  const ctx = document.getElementById('chart');
 
-      <button class="read" onclick="markRead('${msg._id}')">Mark Read</button>
-      <button class="delete" onclick="deleteMsg('${msg._id}')">Delete</button>
-    `;
-
-    container.appendChild(div);
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Read', 'Unread'],
+      datasets: [{
+        data: [
+          messages.filter(m => m.read).length,
+          messages.filter(m => !m.read).length
+        ]
+      }]
+    }
   });
 }
 
-async function deleteMsg(id) {
-  await fetch(`${API}/api/delete/${id}?key=${KEY}`, { method: "DELETE" });
-  loadMessages();
-}
-
+// Actions
 async function markRead(id) {
   await fetch(`${API}/api/read/${id}?key=${KEY}`, { method: "PUT" });
-  loadMessages();
+  load();
 }
 
-document.getElementById("search").addEventListener("input", renderMessages);
-document.getElementById("filter").addEventListener("change", renderMessages);
+async function del(id) {
+  await fetch(`${API}/api/delete/${id}?key=${KEY}`, { method: "DELETE" });
+  load();
+}
 
-loadMessages();
+// Export Excel
+function exportExcel() {
+  let csv = "Name,Email,Message\n";
+  messages.forEach(m => {
+    csv += `${m.name},${m.email},${m.message}\n`;
+  });
+
+  const blob = new Blob([csv]);
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "messages.csv";
+  a.click();
+}
+
+// Export PDF
+function exportPDF() {
+  window.print();
+}
+
+// Events
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("filter").addEventListener("change", render);
+
+// Auto refresh every 10s
+setInterval(load, 10000);
+
+load();
 </script>
 
 </body>
