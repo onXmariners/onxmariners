@@ -318,6 +318,8 @@ let currentEmail = "";
 function openReply(email) {
   currentEmail = email;
 
+  console.log("selected Email): ", email); // DEBUG
+
   document.getElementById("replyModal").style.display = "flex";
   document.getElementById("replyTo").innerText = "To: " + email;
 }
@@ -330,7 +332,15 @@ async function sendReply() {
   const subject = document.getElementById("replySubject").value;
   const message = document.getElementById("replyMessage").value;
 
-  if (!message) return alert("Message required");
+  console.log("Sending to:", currentEmail); // 🔥 DEBUG
+
+  if (!currentEmail) {
+    return alert("❌ No email selected");
+  }
+
+  if (!message) {
+    return alert("❌ Message required");
+  }
 
   const res = await fetch(`${API}/api/reply?key=${KEY}`, {
     method: "POST",
@@ -347,10 +357,10 @@ async function sendReply() {
   const data = await res.json();
 
   if (data.success) {
-    alert("✅ Email sent successfully");
+    alert("✅ Email sent");
     closeModal();
   } else {
-    alert("❌ Failed to send email");
+    alert("❌ Failed");
   }
 }
 
