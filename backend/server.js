@@ -9,7 +9,6 @@ if (!process.env.RESEND_API_KEY) {
 }
 
 const resend = new Resend(process.env.RESEND_API_KEY);
-const resend = new Resend(process.env.RESEND_API_KEY);
 const dotenv = require('dotenv');
 const path = require('path');
 const dns = require('dns');
