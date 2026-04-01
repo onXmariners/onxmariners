@@ -75,20 +75,14 @@ app.post("/api/contact", async (req, res) => {
     console.log("✅ Message saved to DB");
 
     // ✅ 2. Try sending email (OPTIONAL)
-    try {
-      await transporter.sendMail({
-        from: `"Portfolio Contact" <${process.env.EMAIL_USER}>`,
-        to: process.env.RECIPIENT_EMAIL,
-        replyTo: email,
-        subject: `New inquiry from ${name} - ${projectType || "General"}`,
-        text: `Name: ${name}\nEmail: ${email}\nProject: ${projectType}\n\nMessage:\n${message}`,
-      });
+    app.get("/api/messages", async (req, res) => {
+  if (req.query.key !== "admin123") {
+    return res.status(403).send("Unauthorized");
+  }
 
-      console.log("✅ Email sent");
-
-    } catch (emailError) {
-      console.error("⚠️ Email failed BUT DB saved:", emailError.message);
-    }
+  const messages = await Message.find().sort({ createdAt: -1 });
+  res.json(messages);
+});
 
     res.status(200).json({
       success: true,
@@ -116,6 +110,16 @@ app.get("/api/messages", async (req, res) => {
 // ================== HEALTH CHECK ==================
 app.get("/", (req, res) => {
   res.send("Backend is running 🚀");
+});
+
+
+app.get("/api/messages", async (req, res) => {
+  if (req.query.key !== "admin123") {
+    return res.status(403).send("Unauthorized");
+  }
+
+  const messages = await Message.find().sort({ createdAt: -1 });
+  res.json(messages);
 });
 
 
