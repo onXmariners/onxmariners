@@ -126,15 +126,21 @@ app.get("/api/messages", async (req, res) => {
 // ----- delete ApI  functions  -------
 
 // DELETE
+
+// DELETE API
 app.delete("/api/delete/:id", async (req, res) => {
   try {
     if (req.query.key !== "admin123") {
       return res.status(403).json({ error: "Unauthorized" });
     }
 
-    await Message.findByIdAndDelete(req.params.id);
+    const result = await Message.findByIdAndDelete(req.params.id);
 
-    res.json({ success: true, message: "Deleted successfully" });
+    if (!result) {
+      return res.status(404).json({ error: "Message not found" });
+    }
+
+    res.json({ success: true });
 
   } catch (err) {
     console.error(err);
@@ -142,14 +148,18 @@ app.delete("/api/delete/:id", async (req, res) => {
   }
 });
 
-// MARK AS READ
+// MARK READ API
 app.put("/api/read/:id", async (req, res) => {
   try {
     if (req.query.key !== "admin123") {
       return res.status(403).json({ error: "Unauthorized" });
     }
 
-    await Message.findByIdAndUpdate(req.params.id, { read: true });
+    const result = await Message.findByIdAndUpdate(req.params.id, { read: true });
+
+    if (!result) {
+      return res.status(404).json({ error: "Message not found" });
+    }
 
     res.json({ success: true });
 
@@ -157,6 +167,7 @@ app.put("/api/read/:id", async (req, res) => {
     res.status(500).json({ error: "Update failed" });
   }
 });
+
 
 // ================== SERVER ==================
 const PORT = process.env.PORT || 5000;
