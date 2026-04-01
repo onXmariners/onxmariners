@@ -1,6 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const { Resend } = require('resend');
+const { Resend } = require('resend');
+
+if (!process.env.RESEND_API_KEY) {
+  console.error("❌ RESEND_API_KEY missing");
+  process.exit(1);
+}
+
+const resend = new Resend(process.env.RESEND_API_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
 const dotenv = require('dotenv');
 const path = require('path');
@@ -9,6 +17,8 @@ const mongoose = require('mongoose');
 
 dns.setDefaultResultOrder('ipv4first');
 dotenv.config();
+
+console.log("RESEND KEY:", process.env.RESEND_API_KEY);
 
 const app = express();
 app.use(cors());
