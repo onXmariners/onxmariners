@@ -1,44 +1,93 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>CRM Dashboard</title>
+  <title>OnX CRM Dashboard</title>
+
   <style>
-    body {
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       font-family: 'Segoe UI';
-      background: #0f172a;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0f172a, #1e293b);
       color: white;
       padding: 20px;
     }
 
     h1 {
       text-align: center;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
 
+    /* 🔥 Glass Cards */
+    .glass {
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 12px;
+      padding: 15px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+    }
+
+    /* 🔥 Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px,1fr));
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .stat-card h2 {
+      font-size: 28px;
+    }
+
+    /* 🔍 Search */
+    .controls {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    input, select {
+      padding: 10px;
+      border-radius: 8px;
+      border: none;
+      width: 100%;
+    }
+
+    /* 📩 Messages */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(300px,1fr));
+      gap: 15px;
     }
 
     .card {
-      background: #1e293b;
-      padding: 15px;
-      border-radius: 10px;
       position: relative;
       transition: 0.3s;
     }
 
     .card.read {
-      opacity: 0.6;
+      opacity: 0.5;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
     }
 
     button {
-      margin-right: 5px;
-      padding: 5px 10px;
+      margin-top: 10px;
+      padding: 6px 10px;
       border: none;
+      border-radius: 6px;
       cursor: pointer;
-      border-radius: 5px;
     }
 
     .delete { background: red; color: white; }
@@ -46,31 +95,84 @@
 
   </style>
 </head>
+
 <body>
 
-<h1>📊 CRM Dashboard</h1>
+<h1>🚀 OnX CRM Dashboard</h1>
 
+<!-- 🔥 Stats -->
+<div class="stats">
+  <div class="glass stat-card">
+    <h2 id="total">0</h2>
+    <p>Total Messages</p>
+  </div>
+  <div class="glass stat-card">
+    <h2 id="unread">0</h2>
+    <p>Unread</p>
+  </div>
+</div>
+
+<!-- 🔍 Controls -->
+<div class="controls">
+  <input type="text" id="search" placeholder="Search name/email...">
+  <select id="filter">
+    <option value="all">All</option>
+    <option value="read">Read</option>
+    <option value="unread">Unread</option>
+  </select>
+</div>
+
+<!-- 📩 Messages -->
 <div class="grid" id="messages"></div>
 
 <script>
 const API = "https://onxmariners-backend.onrender.com";
 const KEY = "admin123";
 
+let allMessages = [];
+
 async function loadMessages() {
   const res = await fetch(`${API}/api/messages?key=${KEY}`);
   const data = await res.json();
 
+  allMessages = data;
+  updateStats();
+  renderMessages();
+}
+
+function updateStats() {
+  document.getElementById("total").innerText = allMessages.length;
+  document.getElementById("unread").innerText =
+    allMessages.filter(m => !m.read).length;
+}
+
+function renderMessages() {
   const container = document.getElementById("messages");
   container.innerHTML = "";
 
-  data.forEach(msg => {
+  const search = document.getElementById("search").value.toLowerCase();
+  const filter = document.getElementById("filter").value;
+
+  const filtered = allMessages.filter(msg => {
+    const matchSearch =
+      msg.name.toLowerCase().includes(search) ||
+      msg.email.toLowerCase().includes(search);
+
+    const matchFilter =
+      filter === "all" ||
+      (filter === "read" && msg.read) ||
+      (filter === "unread" && !msg.read);
+
+    return matchSearch && matchFilter;
+  });
+
+  filtered.forEach(msg => {
     const div = document.createElement("div");
-    div.className = "card";
+    div.className = "glass card " + (msg.read ? "read" : "");
 
     div.innerHTML = `
-      <p><b>Name:</b> ${msg.name}</p>
-      <p><b>Email:</b> ${msg.email}</p>
-      <p><b>Project:</b> ${msg.projectType || "N/A"}</p>
+      <p><b>${msg.name}</b> (${msg.email})</p>
+      <p>${msg.projectType || ""}</p>
       <p>${msg.message}</p>
 
       <button class="read" onclick="markRead('${msg._id}')">Mark Read</button>
@@ -82,18 +184,17 @@ async function loadMessages() {
 }
 
 async function deleteMsg(id) {
-  await fetch(`${API}/api/delete/${id}?key=${KEY}`, {
-    method: "DELETE"
-  });
+  await fetch(`${API}/api/delete/${id}?key=${KEY}`, { method: "DELETE" });
   loadMessages();
 }
 
 async function markRead(id) {
-  await fetch(`${API}/api/read/${id}?key=${KEY}`, {
-    method: "PUT"
-  });
+  await fetch(`${API}/api/read/${id}?key=${KEY}`, { method: "PUT" });
   loadMessages();
 }
+
+document.getElementById("search").addEventListener("input", renderMessages);
+document.getElementById("filter").addEventListener("change", renderMessages);
 
 loadMessages();
 </script>
