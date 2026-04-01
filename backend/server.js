@@ -33,9 +33,7 @@ const Message = mongoose.model("Message", MessageSchema);
 
 // ================== EMAIL ==================
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
+  service: "gmail",
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -102,7 +100,7 @@ app.post("/api/reply", async (req, res) => {
 
     const { to, subject, message } = req.body;
 
-    console.log("Reply:", req.body);
+    console.log("Reply Request:", req.body);
 
     if (!to) {
       return res.status(400).json({ error: "No recipient email" });
