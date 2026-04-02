@@ -8,7 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* [YOUR EXISTING STYLES - KEPT IDENTICAL] */
+    /* ========== YOUR EXISTING STYLES (kept identical) ========== */
     :root {
       --gold: #fbbf24;
       --gold-dim: #f59e0b;
@@ -28,9 +28,7 @@
       --radius: 14px;
       --radius-sm: 8px;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     body {
       font-family: 'DM Sans', sans-serif;
       background: var(--bg);
@@ -38,7 +36,6 @@
       min-height: 100vh;
       overflow-x: hidden;
     }
-
     body::before {
       content: '';
       position: fixed;
@@ -47,7 +44,6 @@
       pointer-events: none;
       z-index: 0;
     }
-
     .sidebar {
       position: fixed;
       left: 0; top: 0; bottom: 0;
@@ -60,13 +56,11 @@
       padding: 24px 0;
       transition: transform 0.3s ease;
     }
-
     .logo {
       padding: 0 20px 24px;
       border-bottom: 1px solid var(--border);
       margin-bottom: 12px;
     }
-
     .logo-title {
       font-family: 'Syne', sans-serif;
       font-size: 18px;
@@ -74,14 +68,12 @@
       color: var(--gold);
       letter-spacing: -0.5px;
     }
-
     .logo-sub {
       font-size: 11px;
       color: var(--text-dim);
       letter-spacing: 2px;
       text-transform: uppercase;
     }
-
     .nav-item {
       display: flex;
       align-items: center;
@@ -95,17 +87,13 @@
       border-left: 3px solid transparent;
       margin: 1px 0;
     }
-
     .nav-item:hover { color: var(--text); background: rgba(255,255,255,0.03); }
-
     .nav-item.active {
       color: var(--gold);
       background: var(--gold-glow);
       border-left-color: var(--gold);
     }
-
     .nav-item .icon { font-size: 16px; width: 20px; text-align: center; }
-
     .nav-badge {
       margin-left: auto;
       background: var(--gold);
@@ -117,7 +105,6 @@
       min-width: 20px;
       text-align: center;
     }
-
     .compose-btn {
       margin: 0 16px 20px;
       background: var(--gold);
@@ -135,16 +122,13 @@
       transition: all 0.2s;
       letter-spacing: 0.3px;
     }
-
     .compose-btn:hover { background: var(--gold-dim); transform: translateY(-1px); box-shadow: 0 6px 20px var(--gold-glow); }
-
     .main {
       margin-left: 220px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
-
     .topbar {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -156,20 +140,17 @@
       top: 0;
       z-index: 50;
     }
-
     .topbar-title {
       font-family: 'Syne', sans-serif;
       font-size: 20px;
       font-weight: 700;
       flex: 1;
     }
-
     .search-wrap {
       position: relative;
       flex: 1;
       max-width: 360px;
     }
-
     .search-wrap input {
       width: 100%;
       background: var(--surface2);
@@ -182,10 +163,8 @@
       outline: none;
       transition: border-color 0.2s;
     }
-
     .search-wrap input:focus { border-color: var(--gold-border); }
     .search-wrap input::placeholder { color: var(--text-faint); }
-
     .search-icon {
       position: absolute;
       left: 12px;
@@ -195,7 +174,6 @@
       font-size: 13px;
       pointer-events: none;
     }
-
     .filter-select {
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -207,7 +185,6 @@
       cursor: pointer;
       outline: none;
     }
-
     .icon-btn {
       background: var(--surface2);
       border: 1px solid var(--border);
@@ -223,9 +200,7 @@
       transition: all 0.2s;
       position: relative;
     }
-
     .icon-btn:hover { color: var(--gold); border-color: var(--gold-border); }
-
     .notif-dot {
       position: absolute;
       top: 6px; right: 6px;
@@ -234,19 +209,16 @@
       border-radius: 50%;
       display: none;
     }
-
     .content {
       padding: 24px 28px;
       flex: 1;
     }
-
     .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 14px;
       margin-bottom: 24px;
     }
-
     .stat-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -256,7 +228,6 @@
       overflow: hidden;
       transition: border-color 0.2s;
     }
-
     .stat-card::before {
       content: '';
       position: absolute;
@@ -266,10 +237,8 @@
       opacity: 0;
       transition: opacity 0.2s;
     }
-
     .stat-card:hover { border-color: rgba(255,255,255,0.12); }
     .stat-card:hover::before { opacity: 1; }
-
     .stat-label {
       font-size: 11px;
       letter-spacing: 1.5px;
@@ -277,7 +246,6 @@
       color: var(--text-dim);
       margin-bottom: 8px;
     }
-
     .stat-num {
       font-family: 'Syne', sans-serif;
       font-size: 32px;
@@ -285,11 +253,9 @@
       color: var(--gold);
       line-height: 1;
     }
-
     .stat-num.green { color: var(--green); }
     .stat-num.blue { color: var(--blue); }
     .stat-num.red { color: var(--red); }
-
     .stat-icon {
       position: absolute;
       right: 18px;
@@ -297,15 +263,11 @@
       font-size: 22px;
       opacity: 0.2;
     }
-
     .panel {
       display: none;
     }
-
     .panel.active { display: block; }
-
     .email-list { display: flex; flex-direction: column; gap: 6px; }
-
     .email-row {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -319,16 +281,13 @@
       transition: all 0.2s;
       position: relative;
     }
-
     .email-row:hover {
       border-color: var(--gold-border);
       background: var(--surface2);
       transform: translateX(2px);
     }
-
     .email-row.unread { border-left: 3px solid var(--gold); }
     .email-row.read { opacity: 0.6; }
-
     .avatar {
       width: 36px; height: 36px;
       border-radius: 50%;
@@ -342,9 +301,7 @@
       color: #000;
       flex-shrink: 0;
     }
-
     .email-meta { overflow: hidden; }
-
     .email-name {
       font-weight: 500;
       font-size: 14px;
@@ -353,9 +310,7 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .email-row.unread .email-name { font-weight: 600; color: #fff; }
-
     .email-preview {
       font-size: 12px;
       color: var(--text-dim);
@@ -363,7 +318,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
     }
-
     .email-right {
       text-align: right;
       display: flex;
@@ -371,22 +325,18 @@
       align-items: flex-end;
       gap: 6px;
     }
-
     .email-time {
       font-size: 11px;
       color: var(--text-faint);
       white-space: nowrap;
     }
-
     .email-actions {
       display: flex;
       gap: 4px;
       opacity: 0;
       transition: opacity 0.2s;
     }
-
     .email-row:hover .email-actions { opacity: 1; }
-
     .act-btn {
       background: var(--surface3);
       border: 1px solid var(--border);
@@ -400,10 +350,8 @@
       font-size: 12px;
       transition: all 0.15s;
     }
-
     .act-btn:hover { background: var(--gold-glow); border-color: var(--gold-border); color: var(--gold); }
     .act-btn.danger:hover { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--red); }
-
     .empty {
       text-align: center;
       padding: 60px 20px;
@@ -412,14 +360,12 @@
     .empty-icon { font-size: 48px; margin-bottom: 16px; opacity: 0.4; }
     .empty-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-faint); margin-bottom: 8px; }
     .empty-sub { font-size: 13px; }
-
     .email-detail {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       overflow: hidden;
     }
-
     .detail-header {
       padding: 20px 24px;
       border-bottom: 1px solid var(--border);
@@ -427,7 +373,6 @@
       align-items: flex-start;
       gap: 14px;
     }
-
     .detail-avatar {
       width: 44px; height: 44px;
       border-radius: 50%;
@@ -441,11 +386,9 @@
       color: #000;
       flex-shrink: 0;
     }
-
     .detail-info { flex: 1; }
     .detail-name { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 17px; margin-bottom: 3px; }
     .detail-email { font-size: 13px; color: var(--text-dim); }
-
     .detail-body {
       padding: 24px;
       font-size: 14px;
@@ -455,27 +398,23 @@
       white-space: pre-wrap;
       word-break: break-word;
     }
-
     .detail-footer {
       padding: 14px 24px;
       border-top: 1px solid var(--border);
       display: flex;
       gap: 8px;
     }
-
     .chart-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
-
     .chart-card {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       padding: 20px;
     }
-
     .chart-title {
       font-family: 'Syne', sans-serif;
       font-size: 14px;
@@ -484,7 +423,6 @@
       color: var(--text-dim);
       letter-spacing: 0.5px;
     }
-
     .modal-overlay {
       display: none;
       position: fixed;
@@ -496,11 +434,8 @@
       justify-content: center;
       animation: fadeIn 0.2s ease;
     }
-
     .modal-overlay.open { display: flex; }
-
     @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     .modal {
       background: var(--surface);
       border: 1px solid var(--gold-border);
@@ -512,9 +447,7 @@
       box-shadow: 0 0 60px rgba(251,191,36,0.1);
       animation: slideUp 0.25s ease;
     }
-
     @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
     .modal-head {
       padding: 20px 24px 16px;
       border-bottom: 1px solid var(--border);
@@ -522,13 +455,11 @@
       align-items: center;
       justify-content: space-between;
     }
-
     .modal-title {
       font-family: 'Syne', sans-serif;
       font-size: 17px;
       font-weight: 700;
     }
-
     .modal-close {
       width: 30px; height: 30px;
       background: var(--surface2);
@@ -542,13 +473,9 @@
       font-size: 14px;
       transition: all 0.15s;
     }
-
     .modal-close:hover { color: var(--red); border-color: rgba(239,68,68,0.3); }
-
     .modal-body { padding: 20px 24px; }
-
     .form-group { margin-bottom: 14px; }
-
     .form-label {
       font-size: 11px;
       letter-spacing: 1px;
@@ -557,7 +484,6 @@
       margin-bottom: 6px;
       display: block;
     }
-
     .form-input {
       width: 100%;
       background: var(--surface2);
@@ -570,16 +496,13 @@
       outline: none;
       transition: border-color 0.2s;
     }
-
     .form-input:focus { border-color: var(--gold-border); }
     .form-input::placeholder { color: var(--text-faint); }
-
     textarea.form-input {
       min-height: 140px;
       resize: vertical;
       line-height: 1.6;
     }
-
     .modal-footer {
       padding: 14px 24px;
       border-top: 1px solid var(--border);
@@ -588,7 +511,6 @@
       justify-content: flex-end;
       gap: 8px;
     }
-
     .btn {
       padding: 9px 18px;
       border-radius: var(--radius-sm);
@@ -602,23 +524,18 @@
       align-items: center;
       gap: 6px;
     }
-
     .btn-primary {
       background: var(--gold);
       color: #000;
     }
-
     .btn-primary:hover { background: var(--gold-dim); transform: translateY(-1px); }
     .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-
     .btn-ghost {
       background: transparent;
       border: 1px solid var(--border);
       color: var(--text-dim);
     }
-
     .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
-
     .toast-wrap {
       position: fixed;
       bottom: 28px;
@@ -628,7 +545,6 @@
       gap: 8px;
       z-index: 9999;
     }
-
     .toast {
       background: var(--surface3);
       border: 1px solid var(--border);
@@ -643,14 +559,11 @@
       animation: toastIn 0.3s ease;
       border-left: 3px solid var(--gold);
     }
-
     .toast.success { border-left-color: var(--green); }
     .toast.error { border-left-color: var(--red); }
     .toast.info { border-left-color: var(--blue); }
-
     @keyframes toastIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(20px); } }
-
     .spinner {
       width: 16px; height: 16px;
       border: 2px solid rgba(0,0,0,0.2);
@@ -659,9 +572,7 @@
       animation: spin 0.7s linear infinite;
       flex-shrink: 0;
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .skeleton {
       background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
       background-size: 200% 100%;
@@ -669,9 +580,7 @@
       border-radius: 6px;
       height: 14px;
     }
-
     @keyframes shimmer { to { background-position: -200% 0; } }
-
     .skeleton-row {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -681,13 +590,11 @@
       gap: 12px;
       align-items: center;
     }
-
     .skeleton-circle {
       width: 36px; height: 36px;
       border-radius: 50%;
       flex-shrink: 0;
     }
-
     .sent-badge {
       background: rgba(59,130,246,0.15);
       border: 1px solid rgba(59,130,246,0.3);
@@ -698,7 +605,6 @@
       padding: 2px 8px;
       border-radius: 20px;
     }
-
     .mobile-toggle {
       display: none;
       background: none;
@@ -707,11 +613,9 @@
       font-size: 20px;
       cursor: pointer;
     }
-
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
-
     .export-menu {
       position: absolute;
       top: 42px; right: 0;
@@ -724,9 +628,7 @@
       min-width: 140px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     }
-
     .export-menu.open { display: block; }
-
     .export-item {
       padding: 10px 14px;
       font-size: 13px;
@@ -736,41 +638,34 @@
       gap: 8px;
       align-items: center;
     }
-
     .export-item:hover { background: var(--surface3); color: var(--gold); }
-
-    .pagination {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      padding: 20px 0 0;
-    }
-
-    .page-btn {
-      width: 32px; height: 32px;
+    /* ========== NEW FOOTER STYLES ========== */
+    .dashboard-footer {
+      margin-top: 40px;
+      padding: 20px 28px;
+      border-top: 1px solid var(--border);
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 6px;
+      font-size: 12px;
       color: var(--text-dim);
-      cursor: pointer;
-      font-size: 13px;
       display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.15s;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
     }
-
-    .page-btn:hover, .page-btn.active {
-      background: var(--gold-glow);
-      border-color: var(--gold-border);
+    .footer-links a {
+      color: var(--text-dim);
+      text-decoration: none;
+      margin: 0 8px;
+    }
+    .footer-links a:hover {
       color: var(--gold);
     }
-
-    @media (max-width: 900px) {
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-      .chart-grid { grid-template-columns: 1fr; }
+    .storage-used {
+      font-family: monospace;
+      background: var(--surface2);
+      padding: 2px 8px;
+      border-radius: 20px;
     }
-
     @media (max-width: 680px) {
       .sidebar {
         transform: translateX(-100%);
@@ -781,12 +676,17 @@
       .stats-row { grid-template-columns: repeat(2, 1fr); }
       .email-row { grid-template-columns: 36px 1fr; }
       .email-right { display: none; }
+      .dashboard-footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
     }
   </style>
 </head>
 <body>
 
-<!-- ========== LOGIN OVERLAY (JWT) ========== -->
+<!-- LOGIN OVERLAY (JWT) -->
 <div id="loginOverlay" class="modal-overlay" style="display: none; z-index: 2000;">
   <div class="modal" style="width: 400px;">
     <div class="modal-head">
@@ -815,11 +715,7 @@
     <div class="logo-title">⚓ OnXmariners</div>
     <div class="logo-sub">CRM Dashboard</div>
   </div>
-
-  <button class="compose-btn" onclick="openCompose()">
-    ✏️ Compose
-  </button>
-
+  <button class="compose-btn" onclick="openCompose()">✏️ Compose</button>
   <div class="nav-item active" onclick="switchPanel('inbox', this)">
     <span class="icon">📥</span> Inbox
     <span class="nav-badge" id="nav-unread">0</span>
@@ -830,7 +726,6 @@
   <div class="nav-item" onclick="switchPanel('analytics', this)">
     <span class="icon">📊</span> Analytics
   </div>
-
   <div style="margin-top: auto; padding: 16px 20px; border-top: 1px solid var(--border);">
     <div style="font-size: 11px; color: var(--text-faint); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 6px;">Auto-refresh</div>
     <div style="font-size: 12px; color: var(--text-dim); display: flex; align-items: center; gap: 6px;">
@@ -838,162 +733,95 @@
       Live · every 10s
     </div>
   </div>
-
-  <!-- LOGOUT BUTTON (added) -->
-  <button class="compose-btn" style="background: #2d2d2d; color: var(--text); margin-top: 12px; margin-bottom: 20px;" onclick="logout()">
-    🚪 Logout
-  </button>
+  <button class="compose-btn" style="background: #2d2d2d; color: var(--text); margin-top: 12px; margin-bottom: 20px;" onclick="logout()">🚪 Logout</button>
 </nav>
 
-<style>
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.4; }
-  }
-</style>
+<style> @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} } </style>
 
 <!-- MAIN -->
 <div class="main">
-
   <!-- TOPBAR -->
   <div class="topbar">
     <button class="mobile-toggle" onclick="toggleSidebar()">☰</button>
     <div class="topbar-title" id="panel-title">Inbox</div>
-
-    <div class="search-wrap">
-      <span class="search-icon">🔍</span>
-      <input id="search" placeholder="Search messages..." oninput="render()">
-    </div>
-
+    <div class="search-wrap"><span class="search-icon">🔍</span><input id="search" placeholder="Search messages..." oninput="render()"></div>
     <select class="filter-select" id="filter" onchange="render()">
       <option value="all">All</option>
       <option value="unread">Unread</option>
       <option value="read">Read</option>
     </select>
-
-    <div style="position:relative;">
-      <div class="icon-btn" onclick="toggleExport()" title="Export">
-        ⬇️
-        <div class="export-menu" id="exportMenu">
-          <div class="export-item" onclick="exportCSV()">📄 Export CSV</div>
-          <div class="export-item" onclick="exportPDF()">🖨️ Export PDF</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="icon-btn" id="notifBtn" title="Notifications">
-      🔔
-      <div class="notif-dot" id="notifDot"></div>
-    </div>
-
+    <div style="position:relative;"><div class="icon-btn" onclick="toggleExport()" title="Export">⬇️<div class="export-menu" id="exportMenu"><div class="export-item" onclick="exportCSV()">📄 Export CSV</div><div class="export-item" onclick="exportPDF()">🖨️ Export PDF</div></div></div></div>
+    <div class="icon-btn" id="notifBtn" title="Notifications">🔔<div class="notif-dot" id="notifDot"></div></div>
     <div class="icon-btn" onclick="load()" title="Refresh">🔄</div>
   </div>
 
   <!-- CONTENT -->
   <div class="content">
-
-    <!-- STATS ROW -->
     <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-icon">📩</div>
-        <div class="stat-label">Total Messages</div>
-        <div class="stat-num" id="stat-total">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">🔴</div>
-        <div class="stat-label">Unread</div>
-        <div class="stat-num red" id="stat-unread">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">✅</div>
-        <div class="stat-label">Read</div>
-        <div class="stat-num green" id="stat-read">—</div>
-      </div>
-      <div class="stat-card">
-        <div class="stat-icon">📤</div>
-        <div class="stat-label">Sent Replies</div>
-        <div class="stat-num blue" id="stat-sent">—</div>
-      </div>
+      <div class="stat-card"><div class="stat-icon">📩</div><div class="stat-label">Total Messages</div><div class="stat-num" id="stat-total">—</div></div>
+      <div class="stat-card"><div class="stat-icon">🔴</div><div class="stat-label">Unread</div><div class="stat-num red" id="stat-unread">—</div></div>
+      <div class="stat-card"><div class="stat-icon">✅</div><div class="stat-label">Read</div><div class="stat-num green" id="stat-read">—</div></div>
+      <div class="stat-card"><div class="stat-icon">📤</div><div class="stat-label">Sent Replies</div><div class="stat-num blue" id="stat-sent">—</div></div>
     </div>
-
-    <!-- INBOX PANEL -->
-    <div class="panel active" id="panel-inbox">
-      <div class="email-list" id="inbox-list"></div>
-    </div>
-
-    <!-- SENT PANEL -->
-    <div class="panel" id="panel-sent">
-      <div class="email-list" id="sent-list"></div>
-    </div>
-
-    <!-- ANALYTICS PANEL -->
+    <div class="panel active" id="panel-inbox"><div class="email-list" id="inbox-list"></div></div>
+    <div class="panel" id="panel-sent"><div class="email-list" id="sent-list"></div></div>
     <div class="panel" id="panel-analytics">
       <div class="chart-grid">
-        <div class="chart-card">
-          <div class="chart-title">READ VS UNREAD</div>
-          <canvas id="donutChart" height="220"></canvas>
-        </div>
-        <div class="chart-card">
-          <div class="chart-title">MESSAGES OVER TIME (last 7 days)</div>
-          <canvas id="lineChart" height="220"></canvas>
-        </div>
+        <div class="chart-card"><div class="chart-title">READ VS UNREAD</div><canvas id="donutChart" height="220"></canvas></div>
+        <div class="chart-card"><div class="chart-title">MESSAGES OVER TIME (last 7 days)</div><canvas id="lineChart" height="220"></canvas></div>
       </div>
     </div>
+  </div>
 
+  <!-- ========== NEW FOOTER ========== -->
+  <div class="dashboard-footer">
+    <div class="storage-info">
+      📦 <span class="storage-used">85% of 15 GB used</span>
+    </div>
+    <div class="footer-links">
+      <a href="#">Terms</a> · <a href="#">Privacy</a> · <a href="#">Program Policies</a>
+    </div>
+    <div class="activity-info">
+      🕒 Last account activity: 8 minutes ago
+    </div>
   </div>
 </div>
 
-<!-- COMPOSE / REPLY MODAL -->
+<!-- COMPOSE MODAL (with links field) -->
 <div class="modal-overlay" id="composeModal">
   <div class="modal">
-    <div class="modal-head">
-      <span class="modal-title" id="modal-title">✏️ New Message</span>
-      <div class="modal-close" onclick="closeCompose()">✕</div>
-    </div>
+    <div class="modal-head"><span class="modal-title" id="modal-title">✏️ New Message</span><div class="modal-close" onclick="closeCompose()">✕</div></div>
     <div class="modal-body">
+      <div class="form-group"><label class="form-label">To</label><input class="form-input" id="compose-to" placeholder="recipient@email.com"></div>
+      <div class="form-group"><label class="form-label">Subject</label><input class="form-input" id="compose-subject" placeholder="Subject line..."></div>
+      <div class="form-group"><label class="form-label">Message</label><textarea class="form-input" id="compose-message" placeholder="Write your message here..."></textarea></div>
+      <!-- NEW LINKS FIELD -->
       <div class="form-group">
-        <label class="form-label">To</label>
-        <input class="form-input" id="compose-to" placeholder="recipient@email.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Subject</label>
-        <input class="form-input" id="compose-subject" placeholder="Subject line...">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Message</label>
-        <textarea class="form-input" id="compose-message" placeholder="Write your message here..."></textarea>
+        <label class="form-label">🔗 Add links (YouTube, Google Drive, etc.)</label>
+        <textarea class="form-input" id="compose-links" rows="2" placeholder="One link per line&#10;https://youtu.be/...&#10;https://drive.google.com/..."></textarea>
+        <div style="font-size: 11px; color: var(--text-faint); margin-top: 4px;">Only links allowed – they will appear at the bottom of your email.</div>
       </div>
     </div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeCompose()">Cancel</button>
-      <button class="btn btn-primary" id="send-btn" onclick="sendEmail()">
-        <span id="send-label">Send ✈️</span>
-      </button>
+      <button class="btn btn-primary" id="send-btn" onclick="sendEmail()"><span id="send-label">Send ✈️</span></button>
     </div>
   </div>
 </div>
 
-<!-- EMAIL DETAIL MODAL -->
+<!-- DETAIL MODAL -->
 <div class="modal-overlay" id="detailModal">
   <div class="modal" style="width:640px;">
-    <div class="modal-head">
-      <span class="modal-title">📧 Message</span>
-      <div class="modal-close" onclick="closeDetail()">✕</div>
-    </div>
+    <div class="modal-head"><span class="modal-title">📧 Message</span><div class="modal-close" onclick="closeDetail()">✕</div></div>
     <div id="detail-content"></div>
-    <div class="modal-footer">
-      <button class="btn btn-ghost" onclick="closeDetail()">Close</button>
-      <button class="btn btn-primary" id="detail-reply-btn">Reply ↩️</button>
-    </div>
+    <div class="modal-footer"><button class="btn btn-ghost" onclick="closeDetail()">Close</button><button class="btn btn-primary" id="detail-reply-btn">Reply ↩️</button></div>
   </div>
 </div>
 
-<!-- TOAST CONTAINER -->
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script>
-const API = "https://onxmariners-backend.onrender.com";  // your backend URL
-// REMOVED insecure KEY = "admin123"
+const API = "https://onxmariners-backend.onrender.com";
 let authToken = localStorage.getItem('token') || null;
 let allMessages = [];
 let sentReplies = [];
@@ -1005,14 +833,10 @@ let currentDetailMsg = null;
 // ========== AUTH FETCH ==========
 async function authFetch(url, options = {}) {
   if (!authToken) {
-    // show login overlay and prevent further actions
     document.getElementById('loginOverlay').style.display = 'flex';
     throw new Error('Not authenticated');
   }
-  options.headers = {
-    ...options.headers,
-    'Authorization': `Bearer ${authToken}`
-  };
+  options.headers = { ...options.headers, 'Authorization': `Bearer ${authToken}` };
   return fetch(url, options);
 }
 
@@ -1021,10 +845,7 @@ async function login() {
   const email = document.getElementById('loginEmail').value.trim();
   const password = document.getElementById('loginPassword').value.trim();
   const errorDiv = document.getElementById('loginError');
-  if (!email || !password) {
-    errorDiv.innerText = 'Both fields required';
-    return;
-  }
+  if (!email || !password) { errorDiv.innerText = 'Both fields required'; return; }
   try {
     const res = await fetch(`${API}/api/login`, {
       method: 'POST',
@@ -1036,17 +857,13 @@ async function login() {
     authToken = data.token;
     localStorage.setItem('token', authToken);
     document.getElementById('loginOverlay').style.display = 'none';
-    load();  // load messages after successful login
-  } catch (err) {
-    errorDiv.innerText = err.message;
-  }
+    load();
+  } catch (err) { errorDiv.innerText = err.message; }
 }
-
 function logout() {
   localStorage.removeItem('token');
   authToken = null;
   document.getElementById('loginOverlay').style.display = 'flex';
-  // clear displayed data
   allMessages = [];
   sentReplies = [];
   updateStats();
@@ -1055,19 +872,14 @@ function logout() {
   document.getElementById('notifDot').style.display = 'none';
 }
 
-/* ──────────── INIT ──────────── */
+// ========== LOAD MESSAGES ==========
 async function load() {
-  if (!authToken) {
-    document.getElementById('loginOverlay').style.display = 'flex';
-    return;
-  }
+  if (!authToken) { document.getElementById('loginOverlay').style.display = 'flex'; return; }
   showSkeletons();
   try {
-    const res = await authFetch(`${API}/api/messages`);  // removed ?key
+    const res = await authFetch(`${API}/api/messages`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-
-    // New message notification
     if (lastCount > 0 && data.length > lastCount) {
       const n = data.length - lastCount;
       toast(`${n} new message${n > 1 ? 's' : ''} arrived! 📬`, 'info');
@@ -1075,21 +887,15 @@ async function load() {
     }
     lastCount = data.length;
     allMessages = data;
-
     updateStats();
     render();
     drawCharts();
-  } catch (e) {
-    toast('Failed to load messages. Check connection.', 'error');
-  }
+  } catch (e) { toast('Failed to load messages. Check connection.', 'error'); }
 }
-
-/* ──────────── STATS ──────────── */
 function updateStats() {
   const total = allMessages.length;
   const unread = allMessages.filter(m => !m.read).length;
-  const read = allMessages.filter(m => m.read).length;
-
+  const read = total - unread;
   document.getElementById('stat-total').textContent = total;
   document.getElementById('stat-unread').textContent = unread;
   document.getElementById('stat-read').textContent = read;
@@ -1097,204 +903,157 @@ function updateStats() {
   document.getElementById('nav-unread').textContent = unread;
   document.getElementById('nav-unread').style.display = unread > 0 ? '' : 'none';
 }
-
-/* ──────────── RENDER INBOX ──────────── */
 function render() {
   const search = document.getElementById('search').value.toLowerCase();
   const filter = document.getElementById('filter').value;
-
   const filtered = allMessages.filter(m => {
     const matchSearch = (m.name || '').toLowerCase().includes(search) ||
                         (m.email || '').toLowerCase().includes(search) ||
                         (m.message || '').toLowerCase().includes(search);
-    const matchFilter = filter === 'all' ||
-                        (filter === 'read' && m.read) ||
-                        (filter === 'unread' && !m.read);
+    const matchFilter = filter === 'all' || (filter === 'read' && m.read) || (filter === 'unread' && !m.read);
     return matchSearch && matchFilter;
   });
-
   const container = document.getElementById('inbox-list');
   container.innerHTML = '';
-
-  if (!filtered.length) {
-    container.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">📭</div>
-        <div class="empty-title">No messages found</div>
-        <div class="empty-sub">Try adjusting your filters or search query.</div>
-      </div>`;
-    return;
-  }
-
-  // Sort newest first
-  const sorted = [...filtered].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
+  if (!filtered.length) { container.innerHTML = `<div class="empty"><div class="empty-icon">📭</div><div class="empty-title">No messages found</div><div class="empty-sub">Try adjusting your filters or search query.</div></div>`; return; }
+  const sorted = [...filtered].sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt));
   sorted.forEach(m => {
     const row = document.createElement('div');
     row.className = 'email-row ' + (m.read ? 'read' : 'unread');
-
-    const initials = (m.name || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
+    const initials = (m.name || '?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
     const date = formatDate(m.createdAt);
-
     row.innerHTML = `
       <div class="avatar">${initials}</div>
-      <div class="email-meta">
-        <div class="email-name">${escHtml(m.name || 'Unknown')} <span style="font-weight:400;color:var(--text-dim);font-size:12px;">— ${escHtml(m.email || '')}</span></div>
-        <div class="email-preview">${escHtml(m.message || '')}</div>
-      </div>
-      <div class="email-right">
-        <div class="email-time">${date}</div>
-        <div class="email-actions">
-          ${!m.read ? `<div class="act-btn" title="Mark read" onclick="event.stopPropagation();markRead('${m._id}')">✓</div>` : ''}
-          <div class="act-btn" title="Reply" onclick="event.stopPropagation();openReply('${escHtml(m.email)}', '${escHtml(m.name)}')">↩</div>
-          <div class="act-btn danger" title="Delete" onclick="event.stopPropagation();del('${m._id}')">🗑</div>
-        </div>
-      </div>
+      <div class="email-meta"><div class="email-name">${escHtml(m.name || 'Unknown')} <span style="font-weight:400;color:var(--text-dim);font-size:12px;">— ${escHtml(m.email || '')}</span></div><div class="email-preview">${escHtml(m.message || '')}</div></div>
+      <div class="email-right"><div class="email-time">${date}</div><div class="email-actions">
+        ${!m.read ? `<div class="act-btn" title="Mark read" onclick="event.stopPropagation();markRead('${m._id}')">✓</div>` : ''}
+        <div class="act-btn" title="Reply" onclick="event.stopPropagation();openReply('${escHtml(m.email)}', '${escHtml(m.name)}')">↩</div>
+        <div class="act-btn danger" title="Delete" onclick="event.stopPropagation();del('${m._id}')">🗑</div>
+      </div></div>
     `;
-
     row.addEventListener('click', () => openDetail(m));
     container.appendChild(row);
   });
 }
-
-/* ──────────── RENDER SENT ──────────── */
 function renderSent() {
   const container = document.getElementById('sent-list');
   container.innerHTML = '';
-
-  if (!sentReplies.length) {
-    container.innerHTML = `
-      <div class="empty">
-        <div class="empty-icon">📤</div>
-        <div class="empty-title">No sent messages yet</div>
-        <div class="empty-sub">Replies you send will appear here.</div>
-      </div>`;
-    return;
-  }
-
+  if (!sentReplies.length) { container.innerHTML = `<div class="empty"><div class="empty-icon">📤</div><div class="empty-title">No sent messages yet</div><div class="empty-sub">Replies you send will appear here.</div></div>`; return; }
   [...sentReplies].reverse().forEach(m => {
     const row = document.createElement('div');
     row.className = 'email-row read';
-
     const initials = (m.to || '?')[0].toUpperCase();
-
     row.innerHTML = `
       <div class="avatar" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);">${initials}</div>
-      <div class="email-meta">
-        <div class="email-name">
-          To: ${escHtml(m.to)}
-          <span class="sent-badge" style="margin-left:8px;">SENT</span>
-        </div>
-        <div class="email-preview">${escHtml(m.subject ? `[${m.subject}] ` : '')}${escHtml(m.message)}</div>
-      </div>
-      <div class="email-right">
-        <div class="email-time">${formatDate(m.sentAt)}</div>
-        <div class="email-actions" style="opacity:1;">
-          <div class="act-btn" title="Send again" onclick="openCompose('${escHtml(m.to)}', '${escHtml(m.subject || '')}')">↻</div>
-        </div>
-      </div>
+      <div class="email-meta"><div class="email-name">To: ${escHtml(m.to)}<span class="sent-badge" style="margin-left:8px;">SENT</span></div><div class="email-preview">${escHtml(m.subject ? `[${m.subject}] ` : '')}${escHtml(m.message)}</div></div>
+      <div class="email-right"><div class="email-time">${formatDate(m.sentAt)}</div><div class="email-actions" style="opacity:1;"><div class="act-btn" title="Send again" onclick="openCompose('${escHtml(m.to)}', '${escHtml(m.subject || '')}')">↻</div></div></div>
     `;
     container.appendChild(row);
   });
 }
-
-/* ──────────── DETAIL VIEW ──────────── */
 function openDetail(m) {
   currentDetailMsg = m;
-  const initials = (m.name || '?').split(' ').map(w => w[0]).join('').slice(0,2).toUpperCase();
-
+  const initials = (m.name || '?').split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
   document.getElementById('detail-content').innerHTML = `
-    <div class="detail-header">
-      <div class="detail-avatar">${initials}</div>
-      <div class="detail-info">
-        <div class="detail-name">${escHtml(m.name || 'Unknown')}</div>
-        <div class="detail-email">${escHtml(m.email || '')} · ${formatDate(m.createdAt)}</div>
-      </div>
-      ${!m.read ? `<div class="sent-badge" style="background:rgba(251,191,36,0.1);border-color:var(--gold-border);color:var(--gold);">UNREAD</div>` : ''}
-    </div>
+    <div class="detail-header"><div class="detail-avatar">${initials}</div><div class="detail-info"><div class="detail-name">${escHtml(m.name || 'Unknown')}</div><div class="detail-email">${escHtml(m.email || '')} · ${formatDate(m.createdAt)}</div></div>${!m.read ? `<div class="sent-badge" style="background:rgba(251,191,36,0.1);border-color:var(--gold-border);color:var(--gold);">UNREAD</div>` : ''}</div>
     <div class="detail-body">${escHtml(m.message || '')}</div>
   `;
-
-  document.getElementById('detail-reply-btn').onclick = () => {
-    closeDetail();
-    openReply(m.email, m.name);
-  };
-
+  document.getElementById('detail-reply-btn').onclick = () => { closeDetail(); openReply(m.email, m.name); };
   document.getElementById('detailModal').classList.add('open');
-
-  // Auto mark read on open
-  if (!m.read) {
-    markRead(m._id, true);
-  }
+  if (!m.read) markRead(m._id, true);
 }
-
-function closeDetail() {
-  document.getElementById('detailModal').classList.remove('open');
+function closeDetail() { document.getElementById('detailModal').classList.remove('open'); }
+async function markRead(id, silent = false) {
+  try {
+    const res = await authFetch(`${API}/api/read/${id}`, { method: 'PUT' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const msg = allMessages.find(m => m._id === id);
+    if (msg) msg.read = true;
+    updateStats();
+    render();
+    if (!silent) toast('Marked as read ✓', 'success');
+  } catch (e) { toast('Failed to mark read.', 'error'); }
 }
-
-/* ──────────── COMPOSE / REPLY ──────────── */
+async function del(id) {
+  if (!confirm('Delete this message?')) return;
+  try {
+    const res = await authFetch(`${API}/api/delete/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    allMessages = allMessages.filter(m => m._id !== id);
+    updateStats();
+    render();
+    drawCharts();
+    toast('Message deleted.', 'success');
+  } catch (e) { toast('Failed to delete message.', 'error'); }
+}
 function openCompose(toEmail = '', subject = '') {
   document.getElementById('modal-title').textContent = '✏️ New Message';
   document.getElementById('compose-to').value = toEmail;
   document.getElementById('compose-subject').value = subject;
   document.getElementById('compose-message').value = '';
+  document.getElementById('compose-links').value = ''; // clear links
   document.getElementById('compose-to').readOnly = false;
   document.getElementById('composeModal').classList.add('open');
 }
-
 function openReply(email, name = '') {
   document.getElementById('modal-title').textContent = `↩️ Reply to ${name || email}`;
   document.getElementById('compose-to').value = email;
   document.getElementById('compose-to').readOnly = true;
   document.getElementById('compose-subject').value = 'Re: Your enquiry';
   document.getElementById('compose-message').value = '';
+  document.getElementById('compose-links').value = ''; // clear links
   document.getElementById('composeModal').classList.add('open');
   setTimeout(() => document.getElementById('compose-message').focus(), 100);
 }
+function closeCompose() { document.getElementById('composeModal').classList.remove('open'); }
 
-function closeCompose() {
-  document.getElementById('composeModal').classList.remove('open');
+// ========== SEND EMAIL WITH LINKS ==========
+function isValidUrl(string) {
+  try { new URL(string); return true; } catch (_) { return false; }
 }
-
-/* ──────────── SEND ──────────── */
 async function sendEmail() {
   const to = document.getElementById('compose-to').value.trim();
   const subject = document.getElementById('compose-subject').value.trim();
-  const message = document.getElementById('compose-message').value.trim();
+  let message = document.getElementById('compose-message').value.trim();
+  const linksRaw = document.getElementById('compose-links').value.trim();
 
   if (!to) return toast('Please enter a recipient email.', 'error');
   if (!isValidEmail(to)) return toast('Invalid email address.', 'error');
   if (!message) return toast('Message cannot be empty.', 'error');
 
+  // Validate and append links
+  let linksHtml = '';
+  if (linksRaw) {
+    const linkLines = linksRaw.split(/\r?\n/);
+    for (let line of linkLines) {
+      line = line.trim();
+      if (line && !isValidUrl(line)) {
+        toast(`Invalid link: ${line}`, 'error');
+        return;
+      }
+    }
+    linksHtml = '\n\n---\n🔗 Useful Links:\n' + linkLines.filter(l => l.trim()).map(l => l.trim()).join('\n');
+    message = message + linksHtml;
+  }
+
   const btn = document.getElementById('send-btn');
   const label = document.getElementById('send-label');
   btn.disabled = true;
   label.innerHTML = '<div class="spinner"></div> Sending...';
-
   try {
-    // removed ?key
     const res = await authFetch(`${API}/api/reply`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ to, subject, message })
     });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({}));
-      throw new Error(err.error || `HTTP ${res.status}`);
-    }
-
+    if (!res.ok) throw new Error((await res.json()).error || `HTTP ${res.status}`);
     const data = await res.json();
-
-    if (data.success || data.message) {
+    if (data.success) {
       sentReplies.push({ to, subject, message, sentAt: new Date().toISOString() });
       updateStats();
-
       toast(`Email sent to ${to} ✅`, 'success');
       closeCompose();
-    } else {
-      throw new Error(data.error || 'Unknown error from server');
-    }
+    } else throw new Error(data.error || 'Unknown error');
   } catch (e) {
     toast(`Send failed: ${e.message}`, 'error');
   } finally {
@@ -1303,199 +1062,59 @@ async function sendEmail() {
   }
 }
 
-/* ──────────── MARK READ ──────────── */
-async function markRead(id, silent = false) {
-  try {
-    // removed ?key
-    const res = await authFetch(`${API}/api/read/${id}`, { method: 'PUT' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const msg = allMessages.find(m => m._id === id);
-    if (msg) msg.read = true;
-    updateStats();
-    render();
-    if (!silent) toast('Marked as read ✓', 'success');
-  } catch (e) {
-    toast('Failed to mark read.', 'error');
-  }
-}
-
-/* ──────────── DELETE ──────────── */
-async function del(id) {
-  if (!confirm('Delete this message?')) return;
-  try {
-    // removed ?key
-    const res = await authFetch(`${API}/api/delete/${id}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    allMessages = allMessages.filter(m => m._id !== id);
-    updateStats();
-    render();
-    drawCharts();
-    toast('Message deleted.', 'success');
-  } catch (e) {
-    toast('Failed to delete message.', 'error');
-  }
-}
-
-/* ──────────── CHARTS ──────────── */
 function drawCharts() {
   const readCount = allMessages.filter(m => m.read).length;
-  const unreadCount = allMessages.filter(m => !m.read).length;
-
+  const unreadCount = allMessages.length - readCount;
   if (donutChart) donutChart.destroy();
-  const ctx1 = document.getElementById('donutChart');
-  donutChart = new Chart(ctx1, {
+  donutChart = new Chart(document.getElementById('donutChart'), {
     type: 'doughnut',
-    data: {
-      labels: ['Read', 'Unread'],
-      datasets: [{
-        data: [readCount, unreadCount],
-        backgroundColor: ['#22c55e', '#fbbf24'],
-        borderColor: '#0f0f0f',
-        borderWidth: 3,
-      }]
-    },
-    options: {
-      cutout: '72%',
-      plugins: {
-        legend: {
-          labels: { color: '#888', font: { family: 'DM Sans' } }
-        }
-      }
-    }
+    data: { labels: ['Read', 'Unread'], datasets: [{ data: [readCount, unreadCount], backgroundColor: ['#22c55e', '#fbbf24'], borderColor: '#0f0f0f', borderWidth: 3 }] },
+    options: { cutout: '72%', plugins: { legend: { labels: { color: '#888', font: { family: 'DM Sans' } } } } }
   });
-
-  const days = [];
-  const counts = [];
+  const days = [], counts = [];
   for (let i = 6; i >= 0; i--) {
-    const d = new Date();
-    d.setDate(d.getDate() - i);
+    const d = new Date(); d.setDate(d.getDate() - i);
     const label = d.toLocaleDateString('en', { weekday: 'short' });
-    const count = allMessages.filter(m => {
-      const md = new Date(m.createdAt);
-      return md.toDateString() === d.toDateString();
-    }).length;
-    days.push(label);
-    counts.push(count);
+    const count = allMessages.filter(m => new Date(m.createdAt).toDateString() === d.toDateString()).length;
+    days.push(label); counts.push(count);
   }
-
   if (lineChart) lineChart.destroy();
-  const ctx2 = document.getElementById('lineChart');
-  lineChart = new Chart(ctx2, {
+  lineChart = new Chart(document.getElementById('lineChart'), {
     type: 'line',
-    data: {
-      labels: days,
-      datasets: [{
-        label: 'Messages',
-        data: counts,
-        borderColor: '#fbbf24',
-        backgroundColor: 'rgba(251,191,36,0.08)',
-        tension: 0.4,
-        fill: true,
-        pointBackgroundColor: '#fbbf24',
-        pointRadius: 4,
-      }]
-    },
-    options: {
-      scales: {
-        x: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-        y: { ticks: { color: '#888', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } }
-      },
-      plugins: { legend: { display: false } }
-    }
+    data: { labels: days, datasets: [{ label: 'Messages', data: counts, borderColor: '#fbbf24', backgroundColor: 'rgba(251,191,36,0.08)', tension: 0.4, fill: true, pointBackgroundColor: '#fbbf24', pointRadius: 4 }] },
+    options: { scales: { x: { ticks: { color: '#888' }, grid: { color: 'rgba(255,255,255,0.05)' } }, y: { ticks: { color: '#888', stepSize: 1 }, grid: { color: 'rgba(255,255,255,0.05)' } } }, plugins: { legend: { display: false } } }
   });
 }
-
-/* ──────────── PANEL SWITCH ──────────── */
 function switchPanel(name, el) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   document.getElementById(`panel-${name}`).classList.add('active');
   el.classList.add('active');
-
   const titles = { inbox: 'Inbox', sent: 'Sent', analytics: 'Analytics' };
   document.getElementById('panel-title').textContent = titles[name] || name;
-
   if (name === 'sent') renderSent();
-  if (name === 'analytics') { drawCharts(); }
-
+  if (name === 'analytics') drawCharts();
   if (window.innerWidth < 680) document.getElementById('sidebar').classList.remove('open');
 }
-
-/* ──────────── EXPORT ──────────── */
-function toggleExport() {
-  document.getElementById('exportMenu').classList.toggle('open');
-}
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('#exportMenu') && !e.target.closest('.icon-btn')) {
-    document.getElementById('exportMenu').classList.remove('open');
-  }
-});
-
+function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+function toggleExport() { document.getElementById('exportMenu').classList.toggle('open'); }
+document.addEventListener('click', (e) => { if (!e.target.closest('#exportMenu') && !e.target.closest('.icon-btn')) document.getElementById('exportMenu').classList.remove('open'); });
 function exportCSV() {
   let csv = 'Name,Email,Message,Date,Status\n';
-  allMessages.forEach(m => {
-    const date = new Date(m.createdAt).toLocaleString();
-    const msg = (m.message || '').replace(/,/g, ';').replace(/\n/g, ' ');
-    csv += `"${m.name}","${m.email}","${msg}","${date}","${m.read ? 'Read' : 'Unread'}"\n`;
-  });
-  const blob = new Blob([csv], { type: 'text/csv' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `onxmariners-messages-${Date.now()}.csv`;
-  a.click();
-  toast('CSV exported ✓', 'success');
+  allMessages.forEach(m => { const date = new Date(m.createdAt).toLocaleString(); const msg = (m.message || '').replace(/,/g, ';').replace(/\n/g, ' '); csv += `"${m.name}","${m.email}","${msg}","${date}","${m.read ? 'Read' : 'Unread'}"\n`; });
+  const blob = new Blob([csv], { type: 'text/csv' }); const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `onxmariners-messages-${Date.now()}.csv`; a.click(); toast('CSV exported ✓', 'success');
   document.getElementById('exportMenu').classList.remove('open');
 }
-
 function exportPDF() {
-  let content = `
-    <html><head><style>
-      body { font-family: Arial, sans-serif; padding: 40px; color: #222; }
-      h1 { color: #b45309; margin-bottom: 20px; }
-      .msg { border-bottom: 1px solid #ddd; padding: 14px 0; }
-      .name { font-weight: bold; }
-      .date { font-size: 12px; color: #888; }
-      .badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
-      .unread { background: #fef3c7; color: #b45309; }
-      .read { background: #dcfce7; color: #166534; }
-    </style></head><body>
-    <h1>⚓ OnXmariners — Message Export</h1>
-    <p style="color:#888;font-size:13px;">Generated: ${new Date().toLocaleString()} · Total: ${allMessages.length}</p>
-  `;
-  allMessages.forEach(m => {
-    content += `
-      <div class="msg">
-        <div class="name">${escHtml(m.name)} <span class="badge ${m.read ? 'read' : 'unread'}">${m.read ? 'Read' : 'Unread'}</span></div>
-        <div>${escHtml(m.email)}</div>
-        <div style="margin:8px 0;">${escHtml(m.message)}</div>
-        <div class="date">${new Date(m.createdAt).toLocaleString()}</div>
-      </div>`;
-  });
-  content += '</body></html>';
-  const win = window.open('', '_blank', 'width=800,height=700');
-  win.document.write(content);
-  win.document.close();
-  setTimeout(() => win.print(), 500);
+  let content = `<html><head><style>body{font-family:Arial;padding:40px;} h1{color:#b45309;} .msg{border-bottom:1px solid #ddd;padding:14px 0;} .name{font-weight:bold;} .date{font-size:12px;color:#888;} .badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:11px;} .unread{background:#fef3c7;color:#b45309;} .read{background:#dcfce7;color:#166534;}</style></head><body><h1>⚓ OnXmariners — Message Export</h1><p>Generated: ${new Date().toLocaleString()} · Total: ${allMessages.length}</p>`;
+  allMessages.forEach(m => { content += `<div class="msg"><div class="name">${escHtml(m.name)} <span class="badge ${m.read ? 'read' : 'unread'}">${m.read ? 'Read' : 'Unread'}</span></div><div>${escHtml(m.email)}</div><div style="margin:8px 0;">${escHtml(m.message)}</div><div class="date">${new Date(m.createdAt).toLocaleString()}</div></div>`; });
+  content += '</body></html>'; const win = window.open('', '_blank', 'width=800,height=700'); win.document.write(content); win.document.close(); setTimeout(() => win.print(), 500);
   document.getElementById('exportMenu').classList.remove('open');
 }
-
-/* ──────────── SKELETON LOADER ──────────── */
 function showSkeletons() {
   const container = document.getElementById('inbox-list');
-  container.innerHTML = Array(5).fill(0).map(() => `
-    <div class="skeleton-row">
-      <div class="skeleton skeleton-circle"></div>
-      <div style="flex:1;display:flex;flex-direction:column;gap:8px;">
-        <div class="skeleton" style="width:40%;height:13px;"></div>
-        <div class="skeleton" style="width:70%;height:11px;"></div>
-      </div>
-      <div class="skeleton" style="width:60px;height:11px;"></div>
-    </div>
-  `).join('');
+  container.innerHTML = Array(5).fill(0).map(() => `<div class="skeleton-row"><div class="skeleton skeleton-circle"></div><div style="flex:1;display:flex;flex-direction:column;gap:8px;"><div class="skeleton" style="width:40%;height:13px;"></div><div class="skeleton" style="width:70%;height:11px;"></div></div><div class="skeleton" style="width:60px;height:11px;"></div></div>`).join('');
 }
-
-/* ──────────── TOAST ──────────── */
 function toast(msg, type = 'info') {
   const icons = { success: '✅', error: '❌', info: 'ℹ️' };
   const wrap = document.getElementById('toastWrap');
@@ -1503,21 +1122,10 @@ function toast(msg, type = 'info') {
   t.className = `toast ${type}`;
   t.innerHTML = `<span>${icons[type]}</span> ${msg}`;
   wrap.appendChild(t);
-  setTimeout(() => {
-    t.style.animation = 'toastOut 0.3s ease forwards';
-    setTimeout(() => t.remove(), 300);
-  }, 3500);
+  setTimeout(() => { t.style.animation = 'toastOut 0.3s ease forwards'; setTimeout(() => t.remove(), 300); }, 3500);
 }
-
-/* ──────────── HELPERS ──────────── */
-function escHtml(s) {
-  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-function isValidEmail(e) {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
-}
-
+function escHtml(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function isValidEmail(e) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e); }
 function formatDate(d) {
   if (!d) return '';
   const dt = new Date(d);
@@ -1529,12 +1137,6 @@ function formatDate(d) {
   if (diff < 604800000) return dt.toLocaleDateString('en', { weekday: 'short', hour: '2-digit', minute: '2-digit' });
   return dt.toLocaleDateString('en', { month: 'short', day: 'numeric' });
 }
-
-function toggleSidebar() {
-  document.getElementById('sidebar').classList.toggle('open');
-}
-
-/* ──────────── AUTO REFRESH (SECURE) ──────────── */
 setInterval(async () => {
   if (!authToken) return;
   try {
@@ -1542,43 +1144,18 @@ setInterval(async () => {
     if (!res.ok) return;
     const data = await res.json();
     if (data.length !== allMessages.length) {
-      if (data.length > allMessages.length) {
-        const n = data.length - allMessages.length;
-        toast(`${n} new message${n > 1 ? 's' : ''}! 📬`, 'info');
-        document.getElementById('notifDot').style.display = 'block';
-      }
-      allMessages = data;
-      lastCount = data.length;
-      updateStats();
-      render();
+      if (data.length > allMessages.length) { const n = data.length - allMessages.length; toast(`${n} new message${n > 1 ? 's' : ''}! 📬`, 'info'); document.getElementById('notifDot').style.display = 'block'; }
+      allMessages = data; lastCount = data.length; updateStats(); render(); drawCharts();
     }
   } catch {}
 }, 10000);
-
-/* ──────────── KEYBOARD SHORTCUTS ──────────── */
 document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') {
-    closeCompose();
-    closeDetail();
-  }
-  if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-    e.preventDefault();
-    document.getElementById('search').focus();
-  }
-  if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
-    e.preventDefault();
-    openCompose();
-  }
+  if (e.key === 'Escape') { closeCompose(); closeDetail(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); document.getElementById('search').focus(); }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); openCompose(); }
 });
-
-/* ──────────── BOOT ──────────── */
 document.getElementById('loginBtn').addEventListener('click', login);
-if (!authToken) {
-  document.getElementById('loginOverlay').style.display = 'flex';
-} else {
-  load();
-}
+if (!authToken) { document.getElementById('loginOverlay').style.display = 'flex'; } else { load(); }
 </script>
-
 </body>
 </html>
