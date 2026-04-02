@@ -4,6 +4,10 @@ const dotenv = require('dotenv');
 const path = require('path');
 const dns = require('dns');
 const mongoose = require('mongoose');
+require('dotenv').config();
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const auth = require('./middleware/auth');  // <-- this is your JWT middleware
 
 dns.setDefaultResultOrder('ipv4first');
 dotenv.config();
@@ -38,7 +42,29 @@ const Message = mongoose.model("Message", new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 }));
 
-// ================== CONTACT ==================
+// ================== AUTH - LOGIN (PUBLIC) ==================
+app.post('/api/login', async (req, res) => {
+  const { email, password } = req.body;
+
+  if (email !== process.env.ADMIN_EMAIL) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const valid = await bcrypt.compare(password, process.env.ADMIN_PASSWORD_HASH);
+  if (!valid) {
+    return res.status(401).json({ error: 'Invalid credentials' });
+  }
+
+  const token = jwt.sign(
+    { email: process.env.ADMIN_EMAIL, role: 'admin' },
+    process.env.JWT_SECRET,
+    { expiresIn: '8h' }
+  );
+
+  res.json({ token, message: 'Login successful' });
+});
+
+// ================== CONTACT (PUBLIC - NO AUTH) ==================
 app.post("/api/contact", async (req, res) => {
   try {
     const { name, email, projectType, message } = req.body;
@@ -57,13 +83,10 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
-// ================== REPLY ==================
-app.post("/api/reply", async (req, res) => {
+// ================== REPLY (PROTECTED - requires JWT) ==================
+app.post("/api/reply", auth, async (req, res) => {
   try {
-    if (req.query.key !== "admin123") {
-      return res.status(403).json({ error: "Unauthorized" });
-    }
-
+    // REMOVED the insecure key check
     const { to, subject, message } = req.body;
 
     if (!to || !message) {
@@ -87,26 +110,28 @@ app.post("/api/reply", async (req, res) => {
   }
 });
 
-// ================== CRUD ==================
-app.get("/api/messages", async (req, res) => {
-  if (req.query.key !== "admin123") return res.sendStatus(403);
+// ================== GET MESSAGES (PROTECTED) ==================
+app.get("/api/messages", auth, async (req, res) => {
+  // REMOVED key check
   const data = await Message.find().sort({ createdAt: -1 });
   res.json(data);
 });
 
-app.delete("/api/delete/:id", async (req, res) => {
-  if (req.query.key !== "admin123") return res.sendStatus(403);
+// ================== DELETE MESSAGE (PROTECTED) ==================
+app.delete("/api/delete/:id", auth, async (req, res) => {
+  // REMOVED key check
   await Message.findByIdAndDelete(req.params.id);
   res.json({ success: true });
 });
 
-app.put("/api/read/:id", async (req, res) => {
-  if (req.query.key !== "admin123") return res.sendStatus(403);
+// ================== MARK AS READ (PROTECTED) ==================
+app.put("/api/read/:id", auth, async (req, res) => {
+  // REMOVED key check
   await Message.findByIdAndUpdate(req.params.id, { read: true });
   res.json({ success: true });
 });
 
-// ================== TEMPLATE ==================
+// ================== EMAIL TEMPLATE ==================
 function getEmailTemplate(message) {
   return `
   <div style="font-family:Arial;background:#f9fafb;padding:20px">
