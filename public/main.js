@@ -218,3 +218,65 @@ if (contactForm) {
     }
   });
 }
+
+// ========== YouTube Stats ==========
+// Replace with your YouTube Channel ID
+const YOUTUBE_CHANNEL_ID = 'UCg7hy6daMldzXczSxChBx3g';
+// Replace with your actual YouTube Data API Key
+const YOUTUBE_API_KEY = 'AIzaSyC8cIe1dTLiULLcC2YrS5FybPkOsWnNhwY';
+
+async function fetchYouTubeStats() {
+    try {
+        const response = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${YOUTUBE_CHANNEL_ID}&key=${YOUTUBE_API_KEY}`);
+        const data = await response.json();
+        if (data.items && data.items[0]) {
+            const stats = data.items[0].statistics;
+            // Update the specific element in your HTML
+            const youtubeSubsElement = document.querySelector('.stat-item:first-child .stat-number');
+            if (youtubeSubsElement) {
+                const subscriberCount = (stats.subscriberCount / 1000).toFixed(1);
+                youtubeSubsElement.textContent = subscriberCount;
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching YouTube stats:', error);
+    }
+}
+
+// Call the function when the page loads
+fetchYouTubeStats();
+// Refresh stats every hour (3600000 milliseconds)
+setInterval(fetchYouTubeStats, 3600000);
+
+// ========== Instagram Stats ==========
+// This will only work with a valid Instagram Business/Creator account access token.
+const INSTAGRAM_BUSINESS_ACCOUNT_ID = 'YOUR_INSTAGRAM_BUSINESS_ACCOUNT_ID';
+const INSTAGRAM_ACCESS_TOKEN = 'YOUR_INSTAGRAM_ACCESS_TOKEN';
+
+async function fetchInstagramStats() {
+    if (!INSTAGRAM_ACCESS_TOKEN) {
+        console.warn('Instagram access token not configured.');
+        return;
+    }
+    try {
+        const response = await fetch(`https://graph.facebook.com/v18.0/${INSTAGRAM_BUSINESS_ACCOUNT_ID}?fields=followers_count&access_token=${INSTAGRAM_ACCESS_TOKEN}`);
+        const data = await response.json();
+        if (data.followers_count) {
+            const instaFollowersElement = document.querySelector('.stat-item:nth-child(2) .stat-number');
+            if (instaFollowersElement) {
+                const followerCount = (data.followers_count / 1000000).toFixed(1);
+                instaFollowersElement.textContent = followerCount;
+            }
+        }
+    } catch (error) {
+        console.error('Error fetching Instagram stats:', error);
+    }
+}
+
+// ========== Initialize Stats ==========
+fetchYouTubeStats();
+fetchInstagramStats();
+setInterval(() => {
+    fetchYouTubeStats();
+    fetchInstagramStats();
+}, 3600000); // Refresh stats every hour
