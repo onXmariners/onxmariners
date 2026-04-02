@@ -180,6 +180,9 @@ async function reply(email) {
   alert("Email sent!");
 }
 
+app.get("/api/test", (req, res) => {
+  res.send("API working");
+});
 
 // Stats
 function updateStats() {
