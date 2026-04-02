@@ -8,6 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
+    /* [YOUR EXISTING STYLES - KEPT IDENTICAL] */
     :root {
       --gold: #fbbf24;
       --gold-dim: #f59e0b;
@@ -38,7 +39,6 @@
       overflow-x: hidden;
     }
 
-    /* ── NOISE TEXTURE ── */
     body::before {
       content: '';
       position: fixed;
@@ -48,7 +48,6 @@
       z-index: 0;
     }
 
-    /* ── SIDEBAR ── */
     .sidebar {
       position: fixed;
       left: 0; top: 0; bottom: 0;
@@ -139,7 +138,6 @@
 
     .compose-btn:hover { background: var(--gold-dim); transform: translateY(-1px); box-shadow: 0 6px 20px var(--gold-glow); }
 
-    /* ── MAIN ── */
     .main {
       margin-left: 220px;
       min-height: 100vh;
@@ -147,7 +145,6 @@
       flex-direction: column;
     }
 
-    /* ── TOPBAR ── */
     .topbar {
       background: var(--surface);
       border-bottom: 1px solid var(--border);
@@ -238,13 +235,11 @@
       display: none;
     }
 
-    /* ── CONTENT ── */
     .content {
       padding: 24px 28px;
       flex: 1;
     }
 
-    /* ── STATS ROW ── */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -303,14 +298,12 @@
       opacity: 0.2;
     }
 
-    /* ── PANELS ── */
     .panel {
       display: none;
     }
 
     .panel.active { display: block; }
 
-    /* ── EMAIL LIST ── */
     .email-list { display: flex; flex-direction: column; gap: 6px; }
 
     .email-row {
@@ -411,7 +404,6 @@
     .act-btn:hover { background: var(--gold-glow); border-color: var(--gold-border); color: var(--gold); }
     .act-btn.danger:hover { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.3); color: var(--red); }
 
-    /* ── EMPTY STATE ── */
     .empty {
       text-align: center;
       padding: 60px 20px;
@@ -421,7 +413,6 @@
     .empty-title { font-family: 'Syne', sans-serif; font-size: 18px; font-weight: 700; color: var(--text-faint); margin-bottom: 8px; }
     .empty-sub { font-size: 13px; }
 
-    /* ── EMAIL DETAIL ── */
     .email-detail {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -472,7 +463,6 @@
       gap: 8px;
     }
 
-    /* ── CHART PANEL ── */
     .chart-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -495,7 +485,6 @@
       letter-spacing: 0.5px;
     }
 
-    /* ── MODAL OVERLAY ── */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -630,7 +619,6 @@
 
     .btn-ghost:hover { border-color: rgba(255,255,255,0.2); color: var(--text); }
 
-    /* ── TOAST ── */
     .toast-wrap {
       position: fixed;
       bottom: 28px;
@@ -663,7 +651,6 @@
     @keyframes toastIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     @keyframes toastOut { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(20px); } }
 
-    /* ── SPINNER ── */
     .spinner {
       width: 16px; height: 16px;
       border: 2px solid rgba(0,0,0,0.2);
@@ -675,7 +662,6 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ── SKELETON ── */
     .skeleton {
       background: linear-gradient(90deg, var(--surface2) 25%, var(--surface3) 50%, var(--surface2) 75%);
       background-size: 200% 100%;
@@ -702,7 +688,6 @@
       flex-shrink: 0;
     }
 
-    /* ── SENT BADGE ── */
     .sent-badge {
       background: rgba(59,130,246,0.15);
       border: 1px solid rgba(59,130,246,0.3);
@@ -714,7 +699,6 @@
       border-radius: 20px;
     }
 
-    /* ── MOBILE TOGGLE ── */
     .mobile-toggle {
       display: none;
       background: none;
@@ -724,12 +708,10 @@
       cursor: pointer;
     }
 
-    /* ── SCROLLBAR ── */
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
 
-    /* ── EXPORT MENU ── */
     .export-menu {
       position: absolute;
       top: 42px; right: 0;
@@ -757,7 +739,6 @@
 
     .export-item:hover { background: var(--surface3); color: var(--gold); }
 
-    /* ── PAGINATION ── */
     .pagination {
       display: flex;
       justify-content: center;
@@ -785,7 +766,6 @@
       color: var(--gold);
     }
 
-    /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .stats-row { grid-template-columns: repeat(2, 1fr); }
       .chart-grid { grid-template-columns: 1fr; }
@@ -805,6 +785,29 @@
   </style>
 </head>
 <body>
+
+<!-- ========== LOGIN OVERLAY (JWT) ========== -->
+<div id="loginOverlay" class="modal-overlay" style="display: none; z-index: 2000;">
+  <div class="modal" style="width: 400px;">
+    <div class="modal-head">
+      <span class="modal-title">🔐 Admin Login</span>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input class="form-input" id="loginEmail" type="email" placeholder="admin@onxmariners.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" id="loginPassword" type="password">
+      </div>
+      <div id="loginError" style="color: var(--red); font-size: 12px; margin-top: 8px;"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" id="loginBtn">Login →</button>
+    </div>
+  </div>
+</div>
 
 <!-- SIDEBAR -->
 <nav class="sidebar" id="sidebar">
@@ -835,6 +838,11 @@
       Live · every 10s
     </div>
   </div>
+
+  <!-- LOGOUT BUTTON (added) -->
+  <button class="compose-btn" style="background: #2d2d2d; color: var(--text); margin-top: 12px; margin-bottom: 20px;" onclick="logout()">
+    🚪 Logout
+  </button>
 </nav>
 
 <style>
@@ -984,9 +992,9 @@
 <div class="toast-wrap" id="toastWrap"></div>
 
 <script>
-const API = "https://onxmariners-backend.onrender.com";
-const KEY = "admin123";
-
+const API = "https://onxmariners-backend.onrender.com";  // your backend URL
+// REMOVED insecure KEY = "admin123"
+let authToken = localStorage.getItem('token') || null;
 let allMessages = [];
 let sentReplies = [];
 let lastCount = 0;
@@ -994,11 +1002,68 @@ let donutChart = null;
 let lineChart = null;
 let currentDetailMsg = null;
 
+// ========== AUTH FETCH ==========
+async function authFetch(url, options = {}) {
+  if (!authToken) {
+    // show login overlay and prevent further actions
+    document.getElementById('loginOverlay').style.display = 'flex';
+    throw new Error('Not authenticated');
+  }
+  options.headers = {
+    ...options.headers,
+    'Authorization': `Bearer ${authToken}`
+  };
+  return fetch(url, options);
+}
+
+// ========== LOGIN / LOGOUT ==========
+async function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  const errorDiv = document.getElementById('loginError');
+  if (!email || !password) {
+    errorDiv.innerText = 'Both fields required';
+    return;
+  }
+  try {
+    const res = await fetch(`${API}/api/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || 'Login failed');
+    authToken = data.token;
+    localStorage.setItem('token', authToken);
+    document.getElementById('loginOverlay').style.display = 'none';
+    load();  // load messages after successful login
+  } catch (err) {
+    errorDiv.innerText = err.message;
+  }
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  authToken = null;
+  document.getElementById('loginOverlay').style.display = 'flex';
+  // clear displayed data
+  allMessages = [];
+  sentReplies = [];
+  updateStats();
+  render();
+  renderSent();
+  document.getElementById('notifDot').style.display = 'none';
+}
+
 /* ──────────── INIT ──────────── */
 async function load() {
+  if (!authToken) {
+    document.getElementById('loginOverlay').style.display = 'flex';
+    return;
+  }
   showSkeletons();
   try {
-    const res = await fetch(`${API}/api/messages?key=${KEY}`);
+    const res = await authFetch(`${API}/api/messages`);  // removed ?key
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
@@ -1207,7 +1272,8 @@ async function sendEmail() {
   label.innerHTML = '<div class="spinner"></div> Sending...';
 
   try {
-    const res = await fetch(`${API}/api/reply?key=${KEY}`, {
+    // removed ?key
+    const res = await authFetch(`${API}/api/reply`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ to, subject, message })
@@ -1221,7 +1287,6 @@ async function sendEmail() {
     const data = await res.json();
 
     if (data.success || data.message) {
-      // Log to sent
       sentReplies.push({ to, subject, message, sentAt: new Date().toISOString() });
       updateStats();
 
@@ -1241,9 +1306,9 @@ async function sendEmail() {
 /* ──────────── MARK READ ──────────── */
 async function markRead(id, silent = false) {
   try {
-    const res = await fetch(`${API}/api/read/${id}?key=${KEY}`, { method: 'PUT' });
+    // removed ?key
+    const res = await authFetch(`${API}/api/read/${id}`, { method: 'PUT' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    // Optimistic update
     const msg = allMessages.find(m => m._id === id);
     if (msg) msg.read = true;
     updateStats();
@@ -1258,7 +1323,8 @@ async function markRead(id, silent = false) {
 async function del(id) {
   if (!confirm('Delete this message?')) return;
   try {
-    const res = await fetch(`${API}/api/delete/${id}?key=${KEY}`, { method: 'DELETE' });
+    // removed ?key
+    const res = await authFetch(`${API}/api/delete/${id}`, { method: 'DELETE' });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     allMessages = allMessages.filter(m => m._id !== id);
     updateStats();
@@ -1275,7 +1341,6 @@ function drawCharts() {
   const readCount = allMessages.filter(m => m.read).length;
   const unreadCount = allMessages.filter(m => !m.read).length;
 
-  // ── DONUT ──
   if (donutChart) donutChart.destroy();
   const ctx1 = document.getElementById('donutChart');
   donutChart = new Chart(ctx1, {
@@ -1299,7 +1364,6 @@ function drawCharts() {
     }
   });
 
-  // ── LINE: messages per day (last 7 days) ──
   const days = [];
   const counts = [];
   for (let i = 6; i >= 0; i--) {
@@ -1354,7 +1418,6 @@ function switchPanel(name, el) {
   if (name === 'sent') renderSent();
   if (name === 'analytics') { drawCharts(); }
 
-  // Close sidebar on mobile
   if (window.innerWidth < 680) document.getElementById('sidebar').classList.remove('open');
 }
 
@@ -1471,10 +1534,11 @@ function toggleSidebar() {
   document.getElementById('sidebar').classList.toggle('open');
 }
 
-/* ──────────── AUTO REFRESH ──────────── */
+/* ──────────── AUTO REFRESH (SECURE) ──────────── */
 setInterval(async () => {
+  if (!authToken) return;
   try {
-    const res = await fetch(`${API}/api/messages?key=${KEY}`);
+    const res = await authFetch(`${API}/api/messages`);
     if (!res.ok) return;
     const data = await res.json();
     if (data.length !== allMessages.length) {
@@ -1508,7 +1572,12 @@ document.addEventListener('keydown', e => {
 });
 
 /* ──────────── BOOT ──────────── */
-load();
+document.getElementById('loginBtn').addEventListener('click', login);
+if (!authToken) {
+  document.getElementById('loginOverlay').style.display = 'flex';
+} else {
+  load();
+}
 </script>
 
 </body>
