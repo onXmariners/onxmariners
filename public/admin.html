@@ -75,6 +75,8 @@
 
     .card {
       transition: 0.3s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      border: 1px solid rgba(255,255,255,0.1);
     }
 
     .card.read {
@@ -89,6 +91,8 @@
     @media(max-width:600px) {
       h1 { font-size: 18px; }
     }
+
+
 
   </style>
 </head>
@@ -179,10 +183,6 @@ async function reply(email) {
 
   alert("Email sent!");
 }
-
-app.get("/api/test", (req, res) => {
-  res.send("API working");
-});
 
 // Stats
 function updateStats() {
@@ -310,7 +310,16 @@ document.getElementById("search").addEventListener("input", render);
 document.getElementById("filter").addEventListener("change", render);
 
 // Auto refresh every 10s
-setInterval(load, 10000);
+setInterval(async () => {
+  const res = await fetch(`${API}/api/messages?key=${KEY}`);
+  const data = await res.json();
+
+  if (data.length !== messages.length) {
+    messages = data;
+    updateStats();
+    render();
+  }
+}, 3000);
 
 load();
 
@@ -359,12 +368,10 @@ async function sendReply() {
 
   const data = await res.json();
 
-  if (data.success) {
-    alert("✅ Email sent");
-    closeModal();
-  } else {
-    alert("❌ Failed");
-  }
+ if (data.success) {
+  document.getElementById("replyMessage").value = "";
+  alert("✅ Sent successfully");
+}
 }
 
 
