@@ -280,3 +280,15 @@ setInterval(() => {
     fetchYouTubeStats();
     fetchInstagramStats();
 }, 3600000); // Refresh stats every hour
+
+
+// ========== adding something new here for mobile snd better version of the website ==========
+
+// Mobile menu toggle
+const menuToggle = document.getElementById('menuToggle');
+const navlinks = document.getElementById('navLinks');
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', () => {
+    navLinks.classList.toggle('active');
+  });
+}
