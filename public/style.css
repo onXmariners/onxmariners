@@ -1131,7 +1131,7 @@ footer {
   letter-spacing: -0.02em;
   color: #d4d8dd; /* soft grey – change to pastel blue if preferred: #b3d4f0 */
   opacity: 0.35;
-  filter: blur(1.5px);
+  filter: blur(6px);
   transform: scaleX(1.02);
   width: 100%;
   user-select: none;
