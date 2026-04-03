@@ -267,26 +267,53 @@ if (contactForm) {
 // ========== YouTube Stats ==========
 const YOUTUBE_CHANNEL_ID = 'UCg7hy6daMldzXczSxChBx3g';
 const YOUTUBE_API_KEY = 'AIzaSyC8cIe1dTLiULLcC2YrS5FybPkOsWnNhwY';
+    
 
-async function fetchYouTubeStats() {
+ async function fetchYouTubeStats() {
     try {
         const response = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${YOUTUBE_CHANNEL_ID}&key=${YOUTUBE_API_KEY}`);
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(`API Error ${response.status}: ${errorData.error.message}`);
+        }
+        
         const data = await response.json();
+        
         if (data.items && data.items[0]) {
             const stats = data.items[0].statistics;
-            const youtubeSubsElement = document.querySelector('.stat-item:first-child .stat-number');
-            if (youtubeSubsElement) {
-                const subscriberCount = (stats.subscriberCount / 1000).toFixed(1);
-                youtubeSubsElement.textContent = subscriberCount;
+            
+            // Update Subscriber Count (e.g., "287K+")
+            const subscriberCount = parseInt(stats.subscriberCount).toLocaleString();
+            const subscriberElement = document.querySelector('.stat-item:first-child .stat-number');
+            if (subscriberElement) {
+                subscriberElement.textContent = (stats.subscriberCount / 1000).toFixed(1);
+            } else {
+                console.warn('Subscriber count element not found.');
             }
+            
+            // Update View Count
+            const viewCount = parseInt(stats.viewCount).toLocaleString();
+            const viewElement = document.querySelector('.stat-item:last-child .stat-number'); // Adjust selector as needed
+            if (viewElement) {
+                viewElement.textContent = (stats.viewCount / 1000000).toFixed(1);
+            } else {
+                console.warn('View count element not found.');
+            }
+            
+            console.log(`Fetched Stats: ${stats.subscriberCount} subscribers, ${stats.viewCount} views`);
+        } else {
+            console.warn('No channel data found. Check your Channel ID.');
         }
     } catch (error) {
         console.error('Error fetching YouTube stats:', error);
     }
 }
 
+// Call the function when the page loads and set an interval to refresh every hour
 fetchYouTubeStats();
 setInterval(fetchYouTubeStats, 3600000);
+
 
 // ========== Instagram Stats (placeholder – requires valid token) ==========
 const INSTAGRAM_BUSINESS_ACCOUNT_ID = 'YOUR_INSTAGRAM_BUSINESS_ACCOUNT_ID';
