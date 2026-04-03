@@ -37,6 +37,7 @@ const Message = mongoose.model("Message", new mongoose.Schema({
   name: String,
   email: String,
   projectType: String,
+  budget: String,
   message: String,
   read: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
@@ -67,9 +68,9 @@ app.post('/api/login', async (req, res) => {
 // ================== CONTACT (PUBLIC - NO AUTH) ==================
 app.post("/api/contact", async (req, res) => {
   try {
-    const { name, email, projectType, message } = req.body;
+    const { name, email, projectType, budget, message } = req.body;
 
-    if (!name || !email || !message) {
+    if (!name || !email || !message || !budget) {
       return res.status(400).json({ error: "All fields required" });
     }
 

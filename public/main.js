@@ -219,7 +219,7 @@ if (contactForm) {
       const response = await fetch('https://onxmariners-backend.onrender.com/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, projectType, message })
+        body: JSON.stringify({ name, email, projectType, budget, message })
       });
 
       const data = await response.json();
