@@ -121,33 +121,54 @@ const observer = new IntersectionObserver((entries) => {
 skillBars.forEach(bar => observer.observe(bar));
 statNumbers.forEach(stat => observer.observe(stat));
 
-// ---- Video testimonials dynamic ----
+// ========== VIDEO TESTIMONIALS (FIXED) ==========
 const testimonialsData = [
-  { name: "Captain Elena R1.", quote: "onXmariners saved our vessel retrofit. Plus the website he built is stellar!", videoID: "9lPDnJz8vsA"},// (placeholder video ID, replace with actual testimonial video IDs)
-  { name: "Sarah J. (Content Agency)", quote: "The storytelling workshop boosted engagement by 200%. True creator mindset." },
-  { name: "onXpdf Client", quote: "onXpdf.com changed our document workflow forever. Highly recommended!" },
-  { name: "Lucas M. (Shipyard)", quote: "Precision, reliability, and modern digital solutions. The triple threat is real!" },
-  { name: "Travel Vlogger", quote: "He helped me rebrand and my channel exploded. Video testimonial attached!" },
-  { name: "Tech Startup CEO", quote: "Web development skills are top-tier — delivered fast, clean code." },
-  { name: "Maritime Historian", quote: "The storytelling workshop was a game-changer for my online lectures." }
+  {
+    name: "Captain Elena R.",
+    quote: "onXmariners saved our vessel retrofit. Plus the website he built is stellar!",
+    videoId: "9lPDnJz8vsA"   // Your YouTube Short ID
+  },
+  {
+    name: "Sarah J. (Content Agency)",
+    quote: "The storytelling workshop boosted engagement by 200%. True creator mindset.",
+    videoId: "9lPDnJz8vsA"   // Replace with another video ID if you have
+  }
 ];
 
-const track = document.getElementById('testimonialTrack');
-
 function buildTestimonials() {
+  const track = document.getElementById('testimonialTrack');
+  console.log('Testimonial track element:', track);  // Debug: check if element exists
+  if (!track) {
+    console.error('Element with id "testimonialTrack" not found!');
+    return;
+  }
   let cardsHTML = '';
+  // Duplicate for infinite scroll (smooth animation)
   for (let set = 0; set < 2; set++) {
     testimonialsData.forEach(t => {
-      cardsHTML += `<div class="testimonial-card">
-          <div class="video-thumb"><i class="fas fa-play-circle"></i><div style="font-size:0.7rem; margin-top:6px;">🎥 Video testimonial</div></div>
+      cardsHTML += `
+        <div class="testimonial-card">
+          <div class="video-thumb">
+            <iframe width="100%" height="200" 
+                    src="https://www.youtube.com/embed/${t.videoId}" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen></iframe>
+          </div>
           <div class="client-name">${t.name}</div>
           <div class="testimonial-quote">“${t.quote}”</div>
-        </div>`;
+        </div>
+      `;
     });
   }
   track.innerHTML = cardsHTML;
+  console.log('Testimonials built successfully. Number of cards:', testimonialsData.length * 2);
 }
-buildTestimonials();
+
+// Call the function when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+  buildTestimonials();
+});
 
 // ---- sticky nav background ----
 window.addEventListener('scroll', () => {
