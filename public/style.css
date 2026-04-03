@@ -724,7 +724,8 @@ section {
   margin-top: 1rem;
 }
 
-/* ========== FOOTER (unified across all pages) ========== */
+
+/* ========== FOOTER with Social Icons ========== */
 footer {
   background: #0a0a0a;
   border-top: 1px solid rgba(240, 165, 0, 0.2);
@@ -741,28 +742,57 @@ footer {
 }
 .footer-brand {
   flex: 2;
-  min-width: 200px;
+  min-width: 220px;
 }
 .footer-logo {
   font-family: 'Syne', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 700;
-  color: #fbbf24;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #fff;
   margin-bottom: 0.5rem;
 }
 .footer-logo i {
   color: #fbbf24;
   margin-right: 5px;
 }
+.footer-logo span {
+  color: #fbbf24;
+}
 .footer-tagline {
   font-size: 0.8rem;
   color: #aaa;
   line-height: 1.4;
-  max-width: 260px;
+  margin: 0.5rem 0 1rem;
+  max-width: 280px;
+}
+/* Social Icons */
+.footer-socials {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+}
+.social-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(240, 165, 0, 0.1);
+  border: 1px solid rgba(240, 165, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fbbf24;
+  font-size: 1rem;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.social-icon:hover {
+  background: #fbbf24;
+  color: #000;
+  transform: translateY(-3px);
 }
 .footer-col {
   flex: 1;
-  min-width: 150px;
+  min-width: 140px;
 }
 .footer-col h4 {
   font-family: 'Syne', sans-serif;
@@ -806,7 +836,11 @@ footer {
     text-align: center;
   }
   .footer-tagline {
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .footer-socials {
+    justify-content: center;
   }
   .footer-bottom {
     flex-direction: column;
