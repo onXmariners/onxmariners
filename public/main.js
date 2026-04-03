@@ -268,48 +268,41 @@ if (contactForm) {
 const YOUTUBE_CHANNEL_ID = 'UCg7hy6daMldzXczSxChBx3g';
 const YOUTUBE_API_KEY = 'AIzaSyC8cIe1dTLiULLcC2YrS5FybPkOsWnNhwY';
     
+async function fetchYouTubeStats() {
+  try {
+    const response = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${YOUTUBE_CHANNEL_ID}&key=${YOUTUBE_API_KEY}`);
+    if (!response.ok) throw new Error(`API error: ${response.status}`);
+    const data = await response.json();
+    if (data.items && data.items[0]) {
+      const stats = data.items[0].statistics;
+      const subs = parseInt(stats.subscriberCount);
+      const views = parseInt(stats.viewCount);
 
- async function fetchYouTubeStats() {
-    try {
-        const response = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=statistics&id=${YOUTUBE_CHANNEL_ID}&key=${YOUTUBE_API_KEY}`);
-        
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`API Error ${response.status}: ${errorData.error.message}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data.items && data.items[0]) {
-            const stats = data.items[0].statistics;
-            
-            // Update Subscriber Count (e.g., "287K+")
-            const subscriberCount = parseInt(stats.subscriberCount).toLocaleString();
-            const subscriberElement = document.querySelector('.stat-item:first-child .stat-number');
-            if (subscriberElement) {
-                subscriberElement.textContent = (stats.subscriberCount / 1000).toFixed(1);
-            } else {
-                console.warn('Subscriber count element not found.');
-            }
-            
-            // Update View Count
-            const viewCount = parseInt(stats.viewCount).toLocaleString();
-            const viewElement = document.querySelector('.stat-item:last-child .stat-number'); // Adjust selector as needed
-            if (viewElement) {
-                viewElement.textContent = (stats.viewCount / 1000000).toFixed(1);
-            } else {
-                console.warn('View count element not found.');
-            }
-            
-            console.log(`Fetched Stats: ${stats.subscriberCount} subscribers, ${stats.viewCount} views`);
-        } else {
-            console.warn('No channel data found. Check your Channel ID.');
-        }
-    } catch (error) {
-        console.error('Error fetching YouTube stats:', error);
+      // Update subscribers (first stat-item)
+      const subsElement = document.querySelector('.stat-item:first-child .stat-number');
+      if (subsElement) {
+        subsElement.textContent = (subs / 1000).toFixed(1);
+        console.log('Updated subscribers to:', (subs / 1000).toFixed(1));
+      } else {
+        console.warn('Subscriber element not found');
+      }
+
+      // Update total views (third stat-item)
+      const viewsElement = document.querySelector('.stat-item:last-child .stat-number');
+      if (viewsElement) {
+        viewsElement.textContent = (views / 1000000).toFixed(1);
+        console.log('Updated views to:', (views / 1000000).toFixed(1));
+      } else {
+        console.warn('Views element not found');
+      }
+    } else {
+      console.warn('No channel data – check Channel ID');
     }
+  } catch (error) {
+    console.error('YouTube fetch failed:', error);
+  }
 }
-
+               
 // Call the function when the page loads and set an interval to refresh every hour
 fetchYouTubeStats();
 setInterval(fetchYouTubeStats, 3600000);
