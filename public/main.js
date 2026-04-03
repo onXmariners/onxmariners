@@ -191,28 +191,29 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
   });
 });
 
-// ---- Contact form submission ----
+// Contact form submission (with budget field)
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
+    // Get form elements
     const name = document.getElementById('contactName').value.trim();
     const email = document.getElementById('contactEmail').value.trim();
     const projectType = document.getElementById('projectTypeSelect').value;
     const budget = document.getElementById('budgetSelect').value;
     const message = document.getElementById('contactMessage').value.trim();
-    const submitBtn = contactForm.querySelector('submit-btn');
+    
+    // Get the submit button inside the form
+    const submitBtn = contactForm.querySelector('.submit-btn');
 
-    if (!budget) {
-     alert('⚠️ Please select a budget range.');
-     return;
-    }
-    if (!name || !email || !projectType || !message) {
-      alert('⚠️ Please fill in all fields.');
+    // Validation
+    if (!name || !email || !projectType || !budget || !message) {
+      alert('⚠️ Please fill in all fields including budget.');
       return;
     }
 
+    // Disable button and show sending state
     submitBtn.disabled = true;
     submitBtn.textContent = 'Sending...';
 
@@ -234,6 +235,7 @@ if (contactForm) {
       console.error('Fetch error:', error);
       alert('❌ Network error. Please try again later.');
     } finally {
+      // Re-enable button and restore text
       submitBtn.disabled = false;
       submitBtn.textContent = 'SEND MY BRIEF ✨';
     }
