@@ -280,4 +280,3 @@ setInterval(() => {
     fetchYouTubeStats();
     fetchInstagramStats();
 }, 3600000); // Refresh stats every hour
-
