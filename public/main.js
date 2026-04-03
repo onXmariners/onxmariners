@@ -210,7 +210,7 @@ window.addEventListener('scroll', () => {
 
 // ---- mobile menu ----
 const menuBtn = document.getElementById('menuToggle');
-const navLinks = document.getElementById('navLinks');
+const navlinks = document.getElementById('navLinks');
 if (menuBtn && navLinks) {
   menuBtn.addEventListener('click', () => {
     navLinks.classList.toggle('active');

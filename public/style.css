@@ -504,100 +504,65 @@ section {
   font-weight: 300;
 }
 
-/* Testimonials Section – Improved for Real Videos */
+/* Testimonials */
 .testimonials-section {
   overflow: hidden;
   width: 100%;
   position: relative;
 }
-
 .testimonial-track {
   display: flex;
   gap: 2rem;
   width: max-content;
   animation: scrollRightToLeft 38s linear infinite;
 }
-
 .testimonial-track:hover {
   animation-play-state: paused;
 }
-
 .testimonial-card {
-  width: 380px;  /* Slightly wider to fit video controls */
+  width: 340px;
   flex-shrink: 0;
   background: rgba(15,15,15,0.7);
   backdrop-filter: blur(8px);
   border-radius: 28px;
-  padding: 1rem;
+  padding: 1.2rem;
   border: 1px solid rgba(240, 165, 0, 0.3);
   transition: 0.2s;
 }
-
-/* Responsive video wrapper (16:9) */
-.video-wrapper {
-  position: relative;
+.video-thumb {
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 200px;
+  background: radial-gradient(circle at 30% 20%, #2a2a2a, #000000);
   border-radius: 20px;
-  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   margin-bottom: 1rem;
-  background: #000;
+  position: relative;
 }
-
-.video-wrapper iframe,
-.video-wrapper video {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-  border-radius: 20px;
+.video-thumb i {
+  font-size: 3.8rem;
+  color: #F0A500;
+  filter: drop-shadow(0 0 6px #F0A500);
 }
-
 .client-name {
   font-weight: bold;
   font-size: 1.1rem;
   margin-top: 0.5rem;
   font-family: 'DM Sans', sans-serif;
-  color: #fbbf24;
 }
-
 .testimonial-quote {
   font-size: 0.85rem;
   opacity: 0.9;
   margin-top: 8px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 300;
-  color: #ccc;
 }
-
-/* Fix animation – works with duplicated content */
 @keyframes scrollRightToLeft {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
-
-/* Pause animation when any video is playing (optional) */
-.testimonial-card:has(iframe:hover, video:hover) {
-  animation-play-state: paused;
-}
-  
-
-
-
-@media (max-width: 768px) {
-  .testimonial-card {
-    width: 280px;
-  }
-  .testimonial-track {
-    gap: 1rem;
-    animation-duration: 25s; /* faster on mobile */
-  }
-}
-
-
-
 
 /* Contact Section */
 .contact-section {
