@@ -121,13 +121,12 @@ const observer = new IntersectionObserver((entries) => {
 skillBars.forEach(bar => observer.observe(bar));
 statNumbers.forEach(stat => observer.observe(stat));
 
-
-// ========== VIDEO TESTIMONIALS CAROUSEL (Auto + Manual Controls) ==========
+// ========== VIDEO TESTIMONIALS (Dynamic + Infinite Scroll) ==========
 const testimonialsData = [
   {
     name: "Captain Elena R.",
     quote: "onXmariners saved our vessel retrofit. Plus the website he built is stellar!",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"  // Replace with real URL
+    videoUrl: "https://www.youtube.com/embed/bxM_t5jRhUI?si=k2tWGW8kW7Vi0fAR"  // Replace with actual video URL
   },
   {
     name: "Sarah J. (Content Agency)",
@@ -156,17 +155,9 @@ const testimonialsData = [
   }
 ];
 
-// Helper to escape HTML
-function escapeHtml(str) {
-  return str.replace(/[&<>]/g, function(m) {
-    if (m === '&') return '&amp;';
-    if (m === '<') return '&lt;';
-    if (m === '>') return '&gt;';
-    return m;
-  });
-}
+const track = document.getElementById('testimonialTrack');
 
-// Create a single testimonial card element
+// Function to create a single testimonial card with real video
 function createTestimonialCard(data) {
   const card = document.createElement('div');
   card.className = 'testimonial-card';
@@ -180,139 +171,34 @@ function createTestimonialCard(data) {
   return card;
 }
 
-// Carousel variables
-let currentIndex = 0;
-let autoScrollInterval = null;
-const autoScrollDelay = 4000; // 4 seconds
-let cardsPerView = 1;
-let totalCards = testimonialsData.length;
-
-// DOM elements
-const track = document.getElementById('testimonialTrack');
-const prevBtn = document.getElementById('prevTestimonial');
-const nextBtn = document.getElementById('nextTestimonial');
-
-// Calculate cards per view based on screen width
-function updateCardsPerView() {
-  if (window.innerWidth >= 1200) return 3;
-  if (window.innerWidth >= 768) return 2;
-  return 1;
+// Helper to prevent XSS
+function escapeHtml(str) {
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
 }
 
-// Get the gap between cards (in pixels)
-function getGap() {
-  const style = getComputedStyle(track);
-  return parseInt(style.gap) || 32;
-}
-
-// Get the width of one card (including gap)
-function getCardWidth() {
-  if (!track.children.length) return 0;
-  const card = track.children[0];
-  const cardRect = card.getBoundingClientRect();
-  const gap = getGap();
-  return cardRect.width + gap;
-}
-
-// Move to a specific index
-function moveToIndex(index) {
-  const cardWidth = getCardWidth();
-  const gap = getGap();
-  const translateX = -index * (cardWidth);
-  track.style.transform = `translateX(${translateX}px)`;
-  currentIndex = index;
-}
-
-// Move to next set
-function nextSlide() {
-  const maxIndex = totalCards - cardsPerView;
-  if (currentIndex + cardsPerView >= totalCards) {
-    // If near the end, jump to beginning smoothly
-    moveToIndex(0);
-  } else {
-    moveToIndex(currentIndex + 1);
-  }
-  resetAutoScrollTimer();
-}
-
-// Move to previous set
-function prevSlide() {
-  if (currentIndex <= 0) {
-    moveToIndex(totalCards - cardsPerView);
-  } else {
-    moveToIndex(currentIndex - 1);
-  }
-  resetAutoScrollTimer();
-}
-
-// Auto-scroll function
-function startAutoScroll() {
-  if (autoScrollInterval) clearInterval(autoScrollInterval);
-  autoScrollInterval = setInterval(() => {
-    nextSlide();
-  }, autoScrollDelay);
-}
-
-function stopAutoScroll() {
-  if (autoScrollInterval) {
-    clearInterval(autoScrollInterval);
-    autoScrollInterval = null;
-  }
-}
-
-function resetAutoScrollTimer() {
-  stopAutoScroll();
-  startAutoScroll();
-}
-
-// Recalculate layout on window resize
-function rebuildCarousel() {
+// Build the track (original + duplicate for infinite scroll)
+function buildTestimonials() {
   if (!track) return;
-  
-  // Store current video positions? Not needed, just rebuild.
-  const oldScrollIndex = currentIndex;
-  
-  // Clear and rebuild track
   track.innerHTML = '';
+  
+  // Add original set
   testimonialsData.forEach(t => {
     track.appendChild(createTestimonialCard(t));
   });
   
-  // Optional: duplicate for seamless infinite? Actually we'll just handle boundaries.
-  // We don't duplicate; we allow wrap-around via moveToIndex logic.
-  
-  cardsPerView = updateCardsPerView();
-  totalCards = testimonialsData.length;
-  
-  // Reset position
-  moveToIndex(0);
-}
-
-// Initialize carousel
-function initCarousel() {
-  if (!track || !prevBtn || !nextBtn) return;
-  
-  rebuildCarousel();
-  
-  // Event listeners
-  prevBtn.addEventListener('click', prevSlide);
-  nextBtn.addEventListener('click', nextSlide);
-  window.addEventListener('resize', () => {
-    rebuildCarousel();
+  // Duplicate the same set for seamless infinite scroll
+  testimonialsData.forEach(t => {
+    track.appendChild(createTestimonialCard(t));
   });
-  
-  // Pause auto-scroll on hover over container
-  const container = document.querySelector('.testimonial-carousel-container');
-  if (container) {
-    container.addEventListener('mouseenter', stopAutoScroll);
-    container.addEventListener('mouseleave', startAutoScroll);
-  }
-  
-  startAutoScroll();
 }
 
-// Run when DOM is ready
-document.addEventListener('DOMContentLoaded', initCarousel);
+// Initialize
+buildTestimonials();
 
 
 // ---- sticky nav background ----
