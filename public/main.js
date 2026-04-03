@@ -121,85 +121,32 @@ const observer = new IntersectionObserver((entries) => {
 skillBars.forEach(bar => observer.observe(bar));
 statNumbers.forEach(stat => observer.observe(stat));
 
-// ========== VIDEO TESTIMONIALS (Dynamic + Infinite Scroll) ==========
+// ---- Video testimonials dynamic (infinite right-to-left) ----
 const testimonialsData = [
-  {
-    name: "Captain Elena R.",
-    quote: "onXmariners saved our vessel retrofit. Plus the website he built is stellar!",
-    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"  // Replace with actual video URL
-  },
-  {
-    name: "Sarah J. (Content Agency)",
-    quote: "The storytelling workshop boosted engagement by 200%. True creator mindset.",
-    videoUrl: "https://www.youtube.com/embed/VIDEO_ID_2"
-  },
-  {
-    name: "onXpdf Client",
-    quote: "onXpdf.com changed our document workflow forever. Highly recommended!",
-    videoUrl: "https://www.youtube.com/embed/VIDEO_ID_3"
-  },
-  {
-    name: "Lucas M. (Shipyard)",
-    quote: "Precision, reliability, and modern digital solutions. The triple threat is real!",
-    videoUrl: "https://www.youtube.com/embed/VIDEO_ID_4"
-  },
-  {
-    name: "Travel Vlogger",
-    quote: "He helped me rebrand and my channel exploded. Video testimonial attached!",
-    videoUrl: "https://www.youtube.com/embed/VIDEO_ID_5"
-  },
-  {
-    name: "Tech Startup CEO",
-    quote: "Web development skills are top-tier — delivered fast, clean code.",
-    videoUrl: "https://www.youtube.com/embed/VIDEO_ID_6"
-  }
+  { name: "Captain Elena R.", quote: "onXmariners saved our vessel retrofit. Plus the website he built is stellar!" },
+  { name: "Sarah J. (Content Agency)", quote: "The storytelling workshop boosted engagement by 200%. True creator mindset." },
+  { name: "onXpdf Client", quote: "onXpdf.com changed our document workflow forever. Highly recommended!" },
+  { name: "Lucas M. (Shipyard)", quote: "Precision, reliability, and modern digital solutions. The triple threat is real!" },
+  { name: "Travel Vlogger", quote: "He helped me rebrand and my channel exploded. Video testimonial attached!" },
+  { name: "Tech Startup CEO", quote: "Web development skills are top-tier — delivered fast, clean code." }
 ];
 
 const track = document.getElementById('testimonialTrack');
 
-// Function to create a single testimonial card with real video
-function createTestimonialCard(data) {
-  const card = document.createElement('div');
-  card.className = 'testimonial-card';
-  card.innerHTML = `
-    <div class="video-wrapper">
-      <iframe src="${data.videoUrl}" allowfullscreen></iframe>
-    </div>
-    <div class="client-name">${escapeHtml(data.name)}</div>
-    <div class="testimonial-quote">“${escapeHtml(data.quote)}”</div>
-  `;
-  return card;
-}
-
-// Helper to prevent XSS
-function escapeHtml(str) {
-  return str.replace(/[&<>]/g, function(m) {
-    if (m === '&') return '&amp;';
-    if (m === '<') return '&lt;';
-    if (m === '>') return '&gt;';
-    return m;
-  });
-}
-
-// Build the track (original + duplicate for infinite scroll)
 function buildTestimonials() {
-  if (!track) return;
-  track.innerHTML = '';
-  
-  // Add original set
-  testimonialsData.forEach(t => {
-    track.appendChild(createTestimonialCard(t));
-  });
-  
-  // Duplicate the same set for seamless infinite scroll
-  testimonialsData.forEach(t => {
-    track.appendChild(createTestimonialCard(t));
-  });
+  let cardsHTML = '';
+  for (let set = 0; set < 2; set++) {
+    testimonialsData.forEach(t => {
+      cardsHTML += `<div class="testimonial-card">
+          <div class="video-thumb"><i class="fas fa-play-circle"></i><div style="font-size:0.7rem; margin-top:6px;">🎥 Video testimonial</div></div>
+          <div class="client-name">${t.name}</div>
+          <div class="testimonial-quote">“${t.quote}”</div>
+        </div>`;
+    });
+  }
+  track.innerHTML = cardsHTML;
 }
-
-// Initialize
 buildTestimonials();
-
 
 // ---- sticky nav background ----
 window.addEventListener('scroll', () => {
@@ -210,23 +157,9 @@ window.addEventListener('scroll', () => {
 
 // ---- mobile menu ----
 const menuBtn = document.getElementById('menuToggle');
-const navlinks = document.getElementById('navLinks');
-if (menuBtn && navLinks) {
-  menuBtn.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-    const icon = menuBtn.querySelector('i');
-    if (icon) {
-      if (navLinks.classList.contains('active')) {
-        icon.classList.remove('fa-bars');
-        icon.classList.add('fa-times');
-      } else {
-        icon.classList.remove('fa-times');
-        icon.classList.add('fa-bars');
-      }
-    }
-  });
-  document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
-}
+const navLinks = document.getElementById('navLinks');
+menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
+document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
 
 // ---- smooth scroll for anchor links ----
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -348,25 +281,3 @@ setInterval(() => {
     fetchInstagramStats();
 }, 3600000); // Refresh stats every hour
 
-// ==============================================
-// MOBILE MENU TOGGLE
-// ==============================================
-const menuToggle = document.getElementById('menuToggle');
-const navLinks = document.getElementById('navLinks');
-
-if (menuToggle && navLinks) {
-    menuToggle.addEventListener('click', function() {
-        navLinks.classList.toggle('active');
-        // Optional: Change the hamburger icon to 'X' when menu is open
-        const icon = menuToggle.querySelector('i');
-        if (icon) {
-            if (navLinks.classList.contains('active')) {
-                icon.classList.remove('fa-bars');
-                icon.classList.add('fa-times');
-            } else {
-                icon.classList.remove('fa-times');
-                icon.classList.add('fa-bars');
-            }
-        }
-    });
-}
