@@ -157,7 +157,7 @@ window.addEventListener('scroll', () => {
 
 // ---- mobile menu ----
 const menuBtn = document.getElementById('menuToggle');
-const navLinks = document.getElementById('navLinks');
+const navLinks = document.getElementById('navlinks');
 menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
 document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
 
