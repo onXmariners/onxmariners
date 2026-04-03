@@ -1,4 +1,4 @@
-// ---- particle background (gold particles) ----
+// ---- particle background ----
 const canvas = document.getElementById('particle-canvas');
 const ctx = canvas.getContext('2d');
 let width, height;
@@ -121,7 +121,7 @@ const observer = new IntersectionObserver((entries) => {
 skillBars.forEach(bar => observer.observe(bar));
 statNumbers.forEach(stat => observer.observe(stat));
 
-// ---- Video testimonials dynamic (infinite right-to-left) ----
+// ---- Video testimonials dynamic ----
 const testimonialsData = [
   { name: "Captain Elena R.", quote: "onXmariners saved our vessel retrofit. Plus the website he built is stellar!" },
   { name: "Sarah J. (Content Agency)", quote: "The storytelling workshop boosted engagement by 200%. True creator mindset." },
@@ -155,11 +155,24 @@ window.addEventListener('scroll', () => {
   else nav.style.background = "rgba(0,0,0,0.85)";
 });
 
-// ---- mobile menu ----
-const menuBtn = document.getElementById('menuToggle');
-const navLinks = document.getElementById('navlinks');
-menuBtn.addEventListener('click', () => navLinks.classList.toggle('active'));
-document.querySelectorAll('.nav-links a').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('active')));
+// ========== MOBILE MENU TOGGLE (FIXED) ==========
+const menuToggle = document.getElementById('menuToggle');
+const navLinks = document.getElementById('navLinks');
+
+if (menuToggle && navLinks) {
+  menuToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navLinks.classList.toggle('active');
+  });
+  
+  // Close menu when a link is clicked
+  const links = navLinks.querySelectorAll('a');
+  links.forEach(link => {
+    link.addEventListener('click', () => {
+      navLinks.classList.remove('active');
+    });
+  });
+}
 
 // ---- smooth scroll for anchor links ----
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -170,11 +183,15 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     if (target) {
       e.preventDefault();
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      // Also close mobile menu if open
+      if (navLinks && navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+      }
     }
   });
 });
 
-// Contact form submission
+// ---- Contact form submission ----
 const contactForm = document.getElementById('contactForm');
 if (contactForm) {
   contactForm.addEventListener('submit', async (e) => {
@@ -195,12 +212,11 @@ if (contactForm) {
     submitBtn.textContent = 'Sending...';
 
     try {
-      // Use relative URL because backend serves frontend on the same port
       const response = await fetch('https://onxmariners-backend.onrender.com/api/contact', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ name, email, projectType, message })
-});
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name, email, projectType, message })
+      });
 
       const data = await response.json();
       if (response.ok) {
@@ -220,9 +236,7 @@ if (contactForm) {
 }
 
 // ========== YouTube Stats ==========
-// Replace with your YouTube Channel ID
 const YOUTUBE_CHANNEL_ID = 'UCg7hy6daMldzXczSxChBx3g';
-// Replace with your actual YouTube Data API Key
 const YOUTUBE_API_KEY = 'AIzaSyC8cIe1dTLiULLcC2YrS5FybPkOsWnNhwY';
 
 async function fetchYouTubeStats() {
@@ -231,7 +245,6 @@ async function fetchYouTubeStats() {
         const data = await response.json();
         if (data.items && data.items[0]) {
             const stats = data.items[0].statistics;
-            // Update the specific element in your HTML
             const youtubeSubsElement = document.querySelector('.stat-item:first-child .stat-number');
             if (youtubeSubsElement) {
                 const subscriberCount = (stats.subscriberCount / 1000).toFixed(1);
@@ -243,18 +256,15 @@ async function fetchYouTubeStats() {
     }
 }
 
-// Call the function when the page loads
 fetchYouTubeStats();
-// Refresh stats every hour (3600000 milliseconds)
 setInterval(fetchYouTubeStats, 3600000);
 
-// ========== Instagram Stats ==========
-// This will only work with a valid Instagram Business/Creator account access token.
+// ========== Instagram Stats (placeholder – requires valid token) ==========
 const INSTAGRAM_BUSINESS_ACCOUNT_ID = 'YOUR_INSTAGRAM_BUSINESS_ACCOUNT_ID';
 const INSTAGRAM_ACCESS_TOKEN = 'YOUR_INSTAGRAM_ACCESS_TOKEN';
 
 async function fetchInstagramStats() {
-    if (!INSTAGRAM_ACCESS_TOKEN) {
+    if (!INSTAGRAM_ACCESS_TOKEN || INSTAGRAM_ACCESS_TOKEN === 'YOUR_INSTAGRAM_ACCESS_TOKEN') {
         console.warn('Instagram access token not configured.');
         return;
     }
@@ -273,22 +283,5 @@ async function fetchInstagramStats() {
     }
 }
 
-// ========== Initialize Stats ==========
-fetchYouTubeStats();
 fetchInstagramStats();
-setInterval(() => {
-    fetchYouTubeStats();
-    fetchInstagramStats();
-}, 3600000); // Refresh stats every hour
-
-
-// ========== adding something new here for mobile snd better version of the website ==========
-
-// Mobile menu toggle
-const menuToggle = document.getElementById('menuToggle');
-const navlinks = document.getElementById('navLinks');
-if (menuToggle && navLinks) {
-  menuToggle.addEventListener('click', () => {
-    navLinks.classList.toggle('active');
-  });
-}
+setInterval(fetchInstagramStats, 3600000);
