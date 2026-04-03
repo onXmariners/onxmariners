@@ -201,7 +201,8 @@ if (contactForm) {
     const email = document.getElementById('contactEmail').value.trim();
     const projectType = document.getElementById('projectTypeSelect').value;
     const budget = document.getElementById('budgetSelect').value;
-     const message = document.getElementById('contactMessage').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
+    const submitBtn = contactForm.querySelector('submit-btn');
 
     if (!budget) {
      alert('⚠️ Please select a budget range.');
