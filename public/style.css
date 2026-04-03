@@ -1113,3 +1113,46 @@ footer {
 }
 
 
+/* ========== PREMIUM WATERMARK FOOTER ========== */
+.footer-watermark {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  pointer-events: none; /* so it doesn't block clicks */
+}
+
+.watermark-text {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(3rem, 15vw, 8rem);
+  font-weight: 800;
+  text-align: center;
+  white-space: nowrap;
+  letter-spacing: -0.02em;
+  color: #d4d8dd; /* soft grey – change to pastel blue if preferred: #b3d4f0 */
+  opacity: 0.35;
+  filter: blur(1.5px);
+  transform: scaleX(1.02);
+  width: 100%;
+  user-select: none;
+}
+
+.watermark-x {
+  background: linear-gradient(135deg, #00f2fe, #4facfe, #7c3aed);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-weight: 900;
+  text-shadow: 0 0 12px rgba(0, 242, 254, 0.4);
+  position: relative;
+  display: inline-block;
+}
+
+/* Optional: subtle animation for the X */
+.watermark-x:hover {
+  background: linear-gradient(135deg, #f093fb, #f5576c, #4facfe);
+  -webkit-background-clip: text;
+  background-clip: text;
+  transition: 0.3s;
+}
+
