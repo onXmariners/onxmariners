@@ -582,6 +582,8 @@ section {
 .testimonial-card:has(iframe:hover, video:hover) {
   animation-play-state: paused;
 }
+  
+
 
 
 @media (max-width: 768px) {

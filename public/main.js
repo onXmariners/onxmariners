@@ -126,7 +126,7 @@ const testimonialsData = [
   {
     name: "Captain Elena R.",
     quote: "onXmariners saved our vessel retrofit. Plus the website he built is stellar!",
-    videoUrl: "https://www.youtube.com/embed/bxM_t5jRhUI?si=k2tWGW8kW7Vi0fAR"  // Replace with actual video URL
+    videoUrl: "https://www.youtube.com/embed/dQw4w9WgXcQ"  // Replace with actual video URL
   },
   {
     name: "Sarah J. (Content Agency)",
