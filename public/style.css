@@ -504,65 +504,97 @@ section {
   font-weight: 300;
 }
 
-/* Testimonials */
+/* Testimonials Section – Improved for Real Videos */
 .testimonials-section {
   overflow: hidden;
   width: 100%;
   position: relative;
 }
+
 .testimonial-track {
   display: flex;
   gap: 2rem;
   width: max-content;
   animation: scrollRightToLeft 38s linear infinite;
 }
+
 .testimonial-track:hover {
   animation-play-state: paused;
 }
+
 .testimonial-card {
-  width: 340px;
+  width: 380px;  /* Slightly wider to fit video controls */
   flex-shrink: 0;
   background: rgba(15,15,15,0.7);
   backdrop-filter: blur(8px);
   border-radius: 28px;
-  padding: 1.2rem;
+  padding: 1rem;
   border: 1px solid rgba(240, 165, 0, 0.3);
   transition: 0.2s;
 }
-.video-thumb {
-  width: 100%;
-  height: 200px;
-  background: radial-gradient(circle at 30% 20%, #2a2a2a, #000000);
-  border-radius: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  margin-bottom: 1rem;
+
+/* Responsive video wrapper (16:9) */
+.video-wrapper {
   position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 1rem;
+  background: #000;
 }
-.video-thumb i {
-  font-size: 3.8rem;
-  color: #F0A500;
-  filter: drop-shadow(0 0 6px #F0A500);
+
+.video-wrapper iframe,
+.video-wrapper video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 20px;
 }
+
 .client-name {
   font-weight: bold;
   font-size: 1.1rem;
   margin-top: 0.5rem;
   font-family: 'DM Sans', sans-serif;
+  color: #fbbf24;
 }
+
 .testimonial-quote {
   font-size: 0.85rem;
   opacity: 0.9;
   margin-top: 8px;
   font-family: 'DM Sans', sans-serif;
   font-weight: 300;
+  color: #ccc;
 }
+
+/* Fix animation – works with duplicated content */
 @keyframes scrollRightToLeft {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+/* Pause animation when any video is playing (optional) */
+.testimonial-card:has(iframe:hover, video:hover) {
+  animation-play-state: paused;
+}
+
+
+@media (max-width: 768px) {
+  .testimonial-card {
+    width: 280px;
+  }
+  .testimonial-track {
+    gap: 1rem;
+    animation-duration: 25s; /* faster on mobile */
+  }
+}
+
+
 
 /* Contact Section */
 .contact-section {
@@ -966,4 +998,154 @@ footer {
   25% { transform: rotate(15deg); }
   75% { transform: rotate(-10deg); }
   100% { transform: rotate(0deg); }
+}
+
+/* ==============================================
+   GLOBAL RESPONSIVE STYLES
+   ============================================== */
+* {
+    /* This ensures padding and border are included in the element's total width/height */
+    box-sizing: border-box;
+}
+
+img, video, iframe {
+    /* Makes images and videos scale down if they are too big for their container */
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* ==============================================
+   RESPONSIVE NAVIGATION (Hamburger Menu)
+   ============================================== */
+/* Style for the mobile menu button */
+.mobile-menu-btn {
+    display: none; /* Hidden on desktop */
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+/* When screen width is 768px or less, show the hamburger button */
+@media (max-width: 768px) {
+    .mobile-menu-btn {
+        display: block; /* Show on mobile */
+    }
+    .nav-links {
+        display: none; /* Hide the normal menu links */
+        position: absolute;
+        top: 70px; /* Adjust based on your navbar height */
+        left: 0;
+        width: 100%;
+        background: #080808;
+        flex-direction: column;
+        padding: 1rem;
+        gap: 1rem;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        z-index: 1000;
+    }
+    .nav-links.active {
+        display: flex; /* Show the menu when the hamburger is clicked */
+    }
+    .nav-actions {
+        margin-left: auto;
+    }
+    .hire-me-btn {
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+/* ==============================================
+   RESPONSIVE BREAKPOINTS
+   ============================================== */
+
+/* Tablet Styles (768px and below) */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    /* Stats Row */
+    .stats-showcase {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+    .stat-item {
+        width: 100%;
+    }
+
+    /* Contact Form 2-Column Layout */
+    .contact-two-col {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    /* Skills Grid */
+    .skills-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+
+    /* Services Grid */
+    .services-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Projects Grid */
+    .projects-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    /* Triple Threat Grid */
+    .triple-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+}
+
+/* Mobile Styles (480px and below) */
+@media (max-width: 480px) {
+    h1, .hero h1 {
+        font-size: 2rem;
+    }
+    h2, .section-title {
+        font-size: 1.5rem;
+    }
+    .hero-content {
+        padding: 1rem;
+    }
+    .btn-group {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    .service-card {
+        padding: 1rem;
+    }
+    .project-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    .footer-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 1.5rem;
+    }
+    .footer-bottom {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+/* Large Desktop Styles (1400px and above) */
+@media (min-width: 1400px) {
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 }
