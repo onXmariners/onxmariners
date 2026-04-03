@@ -200,9 +200,13 @@ if (contactForm) {
     const name = document.getElementById('contactName').value.trim();
     const email = document.getElementById('contactEmail').value.trim();
     const projectType = document.getElementById('projectTypeSelect').value;
-    const message = document.getElementById('contactMessage').value.trim();
-    const submitBtn = contactForm.querySelector('.submit-btn');
+    const budget = document.getElementById('budgetSelect').value;
+     const message = document.getElementById('contactMessage').value.trim();
 
+    if (!budget) {
+     alert('⚠️ Please select a budget range.');
+     return;
+    }
     if (!name || !email || !projectType || !message) {
       alert('⚠️ Please fill in all fields.');
       return;
