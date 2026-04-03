@@ -594,6 +594,85 @@ section {
   }
 }
 
+/* Testimonials Carousel Container */
+.testimonial-carousel-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 50px;
+}
+
+.testimonial-carousel-wrapper {
+  overflow: hidden;
+  width: 100%;
+}
+
+.testimonial-track {
+  display: flex;
+  gap: 2rem;
+  transition: transform 0.5s ease-in-out;
+  will-change: transform;
+}
+
+/* Arrow buttons */
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  border: 1px solid var(--gold-border);
+  color: var(--gold);
+  font-size: 2rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.carousel-arrow:hover {
+  background: var(--gold);
+  color: #000;
+  border-color: var(--gold);
+}
+
+.prev {
+  left: 0;
+}
+
+.next {
+  right: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .testimonial-carousel-container {
+    padding: 0 30px;
+  }
+  .carousel-arrow {
+    width: 36px;
+    height: 36px;
+    font-size: 1.2rem;
+  }
+  .testimonial-track {
+    gap: 1rem;
+  }
+}
+
+/* Optional: Pause auto-scroll on hover */
+.testimonial-carousel-wrapper:hover .testimonial-track {
+  animation-play-state: paused;
+}
+
 
 
 /* Contact Section */
