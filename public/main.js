@@ -278,22 +278,19 @@ async function fetchYouTubeStats() {
       const subs = parseInt(stats.subscriberCount);
       const views = parseInt(stats.viewCount);
 
-      // Update subscribers (first stat-item)
-      const subsElement = document.querySelector('.stat-item:first-child .stat-number');
-      if (subsElement) {
-        subsElement.textContent = (subs / 1000).toFixed(1);
+      // Get all stat-number elements
+      const statNumbers = document.querySelectorAll('.stat-number');
+      
+      // First stat-number = subscribers
+      if (statNumbers[0]) {
+        statNumbers[0].textContent = (subs / 1000).toFixed(1);
         console.log('Updated subscribers to:', (subs / 1000).toFixed(1));
-      } else {
-        console.warn('Subscriber element not found');
       }
-
-      // Update total views (third stat-item)
-      const viewsElement = document.querySelector('.stat-item:last-child .stat-number');
-      if (viewsElement) {
-        viewsElement.textContent = (views / 1000000).toFixed(1);
+      
+      // Third stat-number = total views
+      if (statNumbers[2]) {
+        statNumbers[2].textContent = (views / 1000000).toFixed(1);
         console.log('Updated views to:', (views / 1000000).toFixed(1));
-      } else {
-        console.warn('Views element not found');
       }
     } else {
       console.warn('No channel data – check Channel ID');
